@@ -1,0 +1,17 @@
+Usuários enviam post em um determinado tópico: post_topic(@username, #tópico, texto) esse texto deve ser enviado a todos os usuários que o seguem.
+
+Usuário torna-se seguidor de outro usuário: follow (@username, @username to follow)
+
+Listar usuários cadastrados no micro twitter: list_users()
+
+Cadastrar usuário no micro twitter: create_user(@username) – cadastra o usuário como participante do twitter
+
+Buscar tópico: usuário solicita lista de tópicos (ou hashtags) cadastrados;
+
+Criar um novo tópico: usuário envia uma solicitação de criação de novo tópico: new_topic(@username,#topic)
+
+Usuário deixa de seguir e de receber posts de um determinado usuário: unfollow (@username, @username <que será desligado>)
+
+O usuário recupera todos os posts, apenas do tópico identificado desde a data especificada até a data atual: retrievetopic(@username, #tópico, timestamp)
+
+Usuário envia um post (Twittar): twitte(@username,text), esse texto deve ser enviado a todos os usuários que o seguem.
