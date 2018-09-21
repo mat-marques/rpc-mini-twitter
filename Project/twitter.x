@@ -53,7 +53,7 @@ program INTERFACE_PROG
 
         int create_user(string) = 1;
 
-        data list_users(void) = 2;
+        string list_users(void) = 2;
 
         int follow (followUser) = 3;
 

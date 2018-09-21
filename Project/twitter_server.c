@@ -18,10 +18,10 @@ create_user_1_svc(char **argp, struct svc_req *rqstp)
 	return &result;
 }
 
-data *
+char **
 list_users_1_svc(void *argp, struct svc_req *rqstp)
 {
-	static data  result;
+	static char * result;
 
 	/*
 	 * insert server code here

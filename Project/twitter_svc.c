@@ -45,7 +45,7 @@ interface_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case list_users:
 		_xdr_argument = (xdrproc_t) xdr_void;
-		_xdr_result = (xdrproc_t) xdr_data;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) list_users_1_svc;
 		break;
 

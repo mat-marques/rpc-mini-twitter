@@ -13,7 +13,7 @@ interface_prog_1(char *host)
 	CLIENT *clnt;
 	int  *result_1;
 	char * create_user_1_arg;
-	data  *result_2;
+	char * *result_2;
 	char *list_users_1_arg;
 	int  *result_3;
 	followUser  follow_1_arg;
@@ -43,7 +43,7 @@ interface_prog_1(char *host)
 		clnt_perror (clnt, "call failed");
 	}
 	result_2 = list_users_1((void*)&list_users_1_arg, clnt);
-	if (result_2 == (data *) NULL) {
+	if (result_2 == (char **) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 	result_3 = follow_1(&follow_1_arg, clnt);

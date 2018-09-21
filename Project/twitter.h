@@ -54,8 +54,8 @@ typedef struct twitteMessage twitteMessage;
 extern  int * create_user_1(char **, CLIENT *);
 extern  int * create_user_1_svc(char **, struct svc_req *);
 #define list_users 2
-extern  data * list_users_1(void *, CLIENT *);
-extern  data * list_users_1_svc(void *, struct svc_req *);
+extern  char ** list_users_1(void *, CLIENT *);
+extern  char ** list_users_1_svc(void *, struct svc_req *);
 #define follow 3
 extern  int * follow_1(followUser *, CLIENT *);
 extern  int * follow_1_svc(followUser *, struct svc_req *);
@@ -84,8 +84,8 @@ extern int interface_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 extern  int * create_user_1();
 extern  int * create_user_1_svc();
 #define list_users 2
-extern  data * list_users_1();
-extern  data * list_users_1_svc();
+extern  char ** list_users_1();
+extern  char ** list_users_1_svc();
 #define follow 3
 extern  int * follow_1();
 extern  int * follow_1_svc();
