@@ -1,0 +1,23 @@
+1) Baixar a biblioteca para usar o rpcgen
+    - sudo apt-get install rpcbind
+    - sudo apt install libc-dev-bin
+
+
+2) Baixar os arquivos do projeto do mini-twitter
+
+3) Baixar o Mysql
+    - sudo apt-get install mysql-server mysql-client
+    - sudo apt-get install libmysqlclient-dev libmysql++-dev libmysqlcppconn-dev
+    - baixar e instalar a biblioteca para c++ do mysql no seguinte link: https://dev.mysql.com/downloads/connector/cpp/
+    - Guia da ferramenta Connector: https://dev.mysql.com/doc/connector-cpp/8.0/en/
+    
+4) Configurar o banco de dados da aplicação seguindo as instruções no arquivo da pasta: 
+SQL/Specifications/twitter.sql
+    - Entrar no banco de dados: mysql -h localhost -u root -p
+    - Copiar os comandos do arquivo para o terminal
+
+    
+
+
+
+
