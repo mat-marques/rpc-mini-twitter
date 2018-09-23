@@ -3,37 +3,26 @@
 
 int main(int argc, char **argv)
 {
-
+    char **matrixResult = NULL;
+    int matrixRows = 0, matrixColumns = 0;
     MYSQL *con = mysqlConnector("localhost", "root", "", "twitter");
 
     if (con == NULL) 
     {
-        fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);
     }
 
-    MYSQL_RES *result = selectDate(con, "SELECT * FROM user");
+    matrixResult = selectDate(con, "SELECT * FROM user", &matrixRows, &matrixColumns);
 
-    if (result == NULL) 
-    {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    for(int i = 0; i < matrixRows; i++){
+        printf("%s\n", matrixResult[i]);
     }
 
-    int num_fields = mysql_num_fields(result);
-
-    MYSQL_ROW row;
-    
-    while ((row = mysql_fetch_row(result))) 
-    { 
-        for(int i = 0; i < num_fields; i++) 
-        { 
-            printf("%s ", row[i] ? row[i] : "NULL"); 
-        } 
-            printf("\n"); 
+    for(int i = 0; i < matrixRows; i++){
+        free(matrixResult[i]);
     }
 
-    mysql_free_result(result);
+    free(matrixResult);
 
     closeConnector(con);
 }
