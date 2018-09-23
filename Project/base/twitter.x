@@ -38,17 +38,16 @@ struct retrieve
 
 struct twitteMessage
 {
-
     char *username;
     char *text;
-
+    char *topic;
 };
 
 /* Definição da interface que será oferecida aos clientes */
-program INTERFACE_PROG
+program TWITTER_PROG
 {
 
-    version INTERFACE_VERSION
+    version TWITTER_VERSION
     {
 
         int create_user(string) = 1;
@@ -65,7 +64,7 @@ program INTERFACE_PROG
 
         int unfollow (followUser) = 7;
 
-        int retrievetopic(retrieve) = 8;
+        string retrievetopic(retrieve) = 8;
 
         int twitte(twitteMessage) = 9;
 

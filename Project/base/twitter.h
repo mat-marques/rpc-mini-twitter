@@ -43,11 +43,12 @@ typedef struct retrieve retrieve;
 struct twitteMessage {
 	char *username;
 	char *text;
+	char *topic;
 };
 typedef struct twitteMessage twitteMessage;
 
-#define INTERFACE_PROG 12345678
-#define INTERFACE_VERSION 1
+#define TWITTER_PROG 12345678
+#define TWITTER_VERSION 1
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define create_user 1
@@ -72,12 +73,12 @@ extern  int * new_topic_1_svc(topic *, struct svc_req *);
 extern  int * unfollow_1(followUser *, CLIENT *);
 extern  int * unfollow_1_svc(followUser *, struct svc_req *);
 #define retrievetopic 8
-extern  int * retrievetopic_1(retrieve *, CLIENT *);
-extern  int * retrievetopic_1_svc(retrieve *, struct svc_req *);
+extern  char ** retrievetopic_1(retrieve *, CLIENT *);
+extern  char ** retrievetopic_1_svc(retrieve *, struct svc_req *);
 #define twitte 9
 extern  int * twitte_1(twitteMessage *, CLIENT *);
 extern  int * twitte_1_svc(twitteMessage *, struct svc_req *);
-extern int interface_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
+extern int twitter_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define create_user 1
@@ -102,12 +103,12 @@ extern  int * new_topic_1_svc();
 extern  int * unfollow_1();
 extern  int * unfollow_1_svc();
 #define retrievetopic 8
-extern  int * retrievetopic_1();
-extern  int * retrievetopic_1_svc();
+extern  char ** retrievetopic_1();
+extern  char ** retrievetopic_1_svc();
 #define twitte 9
 extern  int * twitte_1();
 extern  int * twitte_1_svc();
-extern int interface_prog_1_freeresult ();
+extern int twitter_prog_1_freeresult ();
 #endif /* K&R C */
 
 /* the xdr functions */

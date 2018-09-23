@@ -17,7 +17,7 @@
 #endif
 
 static void
-interface_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+twitter_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
 		char *create_user_1_arg;
@@ -81,7 +81,7 @@ interface_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case retrievetopic:
 		_xdr_argument = (xdrproc_t) xdr_retrieve;
-		_xdr_result = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) retrievetopic_1_svc;
 		break;
 
@@ -116,15 +116,15 @@ main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (INTERFACE_PROG, INTERFACE_VERSION);
+	pmap_unset (TWITTER_PROG, TWITTER_VERSION);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, INTERFACE_PROG, INTERFACE_VERSION, interface_prog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (INTERFACE_PROG, INTERFACE_VERSION, udp).");
+	if (!svc_register(transp, TWITTER_PROG, TWITTER_VERSION, twitter_prog_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (TWITTER_PROG, TWITTER_VERSION, udp).");
 		exit(1);
 	}
 
@@ -133,8 +133,8 @@ main (int argc, char **argv)
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, INTERFACE_PROG, INTERFACE_VERSION, interface_prog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (INTERFACE_PROG, INTERFACE_VERSION, tcp).");
+	if (!svc_register(transp, TWITTER_PROG, TWITTER_VERSION, twitter_prog_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (TWITTER_PROG, TWITTER_VERSION, tcp).");
 		exit(1);
 	}
 

@@ -66,5 +66,7 @@ xdr_twitteMessage (XDR *xdrs, twitteMessage *objp)
 		 return FALSE;
 	 if (!xdr_pointer (xdrs, (char **)&objp->text, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->topic, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
 	return TRUE;
 }

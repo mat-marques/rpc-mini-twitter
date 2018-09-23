@@ -75,30 +75,25 @@ hashtags_1_svc(void *argp, struct svc_req *rqstp)
 int *
 new_topic_1_svc(topic *argp, struct svc_req *rqstp)
 {
-	static int  result = 0;
+	static int  result;
 	// MYSQL *con = mysqlConnector(host, user, password, dbName);
-	// char *query1 = NULL, *query2 = NULL, *query3 = NULL, *query4 = NULL;
+	char *query1 = NULL, *query2 = NULL, *query3 = NULL, *query4 = NULL;
 
     // if (con == NULL) 
     // {
     //     exit(1);
     // }
-	printf("Passei Aqui\n");
-	printf("%s", argp->username);
-	
-	
-	// query1 = strcat("INSERT INTO topic (topic, id_user) VALUES(", argp->topic);
-	// query2 = strcat(query1, ", ");
-	// query3 = strcat(query2, argp->username);
-	// query4 = strcat(query3, ");");
+	query1 = strcat("INSERT INTO topic (topic, id_user) VALUES(", argp->topic);
+	query2 = strcat(query1, ", ");
+	query3 = strcat(query2, argp->username);
+	query4 = strcat(query3, ");");
 
 	// result = insertDate(con, query4);
-	
-	// printf("%s", query4);
-	// free(query1);
-	// free(query2);
-	// free(query3);
-	// free(query4);
+	printf("%s", query4);
+	free(query1);
+	free(query2);
+	free(query3);
+	free(query4);
 
 	return &result;
 }

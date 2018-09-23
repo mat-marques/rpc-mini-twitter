@@ -15,11 +15,12 @@ ALTER TABLE user ADD CONSTRAINT pk_user_id PRIMARY KEY(id);
 
 
 CREATE TABLE topic(
-    topic VARCHAR(50)
+    topic VARCHAR(50),
+    id_user VARCHAR(50)
 );
 
 ALTER TABLE topic ADD CONSTRAINT pk_topic PRIMARY KEY(topic);
-
+ALTER TABLE topic ADD CONSTRAINT fk_topic_id_user FOREIGN KEY (id_user) REFERENCES user(id);
 
 
 

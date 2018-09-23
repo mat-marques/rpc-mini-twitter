@@ -114,15 +114,15 @@ unfollow_1(followUser *argp, CLIENT *clnt)
 	return (&clnt_res);
 }
 
-int *
+char **
 retrievetopic_1(retrieve *argp, CLIENT *clnt)
 {
-	static int clnt_res;
+	static char *clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, retrievetopic,
 		(xdrproc_t) xdr_retrieve, (caddr_t) argp,
-		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}

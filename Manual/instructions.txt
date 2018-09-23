@@ -14,7 +14,7 @@ SQL/Specifications/twitter.sql
     - Entrar no banco de dados: mysql -h localhost -u root -p
     - Copiar os comandos do arquivo para o terminal
     - Ao compilar qualquer extensão .c que tenha manipulação do mysql, então deve-se colocar
-    a tag `mysql_config --cflags --libs`
+    a tag `-I/usr/include/mysql`
 
 
 
