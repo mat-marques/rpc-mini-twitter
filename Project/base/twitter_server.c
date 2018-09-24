@@ -254,6 +254,27 @@ void eraseBase(List list) {
 }
 
 
+List startList(List list){
+  Base *L1 = (Base *)list;
+  if(L1 == NULL){
+    return list;
+  }else{
+    return createL();
+  }
+}
+
+
+
+List USER = NULL;
+List TOPIC = NULL;
+List TWITTE = NULL;
+List FOLLOWERS = NULL;
+
+
+
+
+
+
 
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////
