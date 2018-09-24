@@ -7,6 +7,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
 #include "twitter.h"
 
 #define fileHelpName "instructions.txt"
@@ -79,6 +80,7 @@ void
 retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *timestamp)
 {
 	char **result;
+	int i = 0;
 	data r;
 
 	r.username = (char*) malloc(strlen(username) * sizeof(char));
@@ -98,6 +100,14 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
+	}
+	else
+	{
+		while(*(result+i) != NULL)
+		{
+			printf("%s\n", *(result+i));
+			i++;
+		}
 	}
 
 }

@@ -4,9 +4,263 @@
  * as a guideline for developing your own functions.
  */
 
-#include "twitter.h"
-// #include "MysqlConnector.h"
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
+#include "twitter.h"
+
+typedef void* List;
+typedef void* Item;
+typedef void (*eraseItemL)(Item);
+typedef int (*compareToL)(Item, Item);
+
+typedef struct Element {
+  Item info;
+  struct Element *next;
+  struct Element *previous;
+} Element;
+
+typedef struct Base {
+  Element *first;
+  Element *last;
+  int size;
+} Base;
+
+List createL() {
+  Base *base = NULL;
+  base = (Base *)malloc(sizeof(Base));
+  if (base != NULL) {
+    base->first = NULL;
+    base->last = NULL;
+    base->size = 0;
+  } else {
+    printf("Error in alocation memory.\n");
+  }
+  return (List)base;
+}
+
+
+int lengthL(List list) {
+  Base *base = (Base *)list;
+  if (list != NULL)
+    return base->size;
+
+  return 0;
+}
+
+int isEmpty(List list) {
+  Base *L1 = (Base *)list;
+  if (L1->first == NULL) {
+    return 1;
+  }
+  return 0;
+}
+
+int insertEndL(List list, Item item) {
+  Base *base = (Base *)list;
+  Element *element = NULL;
+  if (base != NULL) {
+    element = (Element *)malloc(sizeof(Element));
+    if (element == NULL) {
+      return 0;
+    }
+    element->info = item;
+    if (base->first != NULL) {
+      element->next = NULL;
+      element->previous = base->last;
+      base->last->next = element;
+      base->last = element;
+    } else {
+      base->first = element;
+      base->last = element;
+      element->next = NULL;
+      element->previous = NULL;
+    }
+    base->size = base->size + 1;
+    return 1;
+  }
+  return 0;
+}
+
+
+Item searchItemL(List list, Item item, compareToL func) {
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  Item info = NULL;
+  int i = 0, j = 0;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      j = base->size;
+      aux = base->first;
+      for (i = 1; i <= j; i++) {
+        if (func(aux->info, item) == 1) {
+          info = aux->info;
+          break;
+        }
+        aux = aux->next;
+      }
+    }
+  }
+  return info;
+}
+
+int removeBeginL(List list, eraseItemL func) {
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  if (base != NULL) {
+    if (base->first != NULL && base->size == 1) {
+      if (func != NULL)
+        func(base->last->info);
+      free(base->last);
+      base->last = NULL;
+      base->first = NULL;
+      base->size = base->size - 1;
+      return 1;
+    }
+    if (base->first != NULL) {
+      aux = base->first->next;
+      aux->previous = NULL;
+      if (func != NULL)
+        func(base->first->info);
+      free(base->first);
+      base->first = aux;
+      base->size = base->size - 1;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int removeEndL(List list, eraseItemL func) {
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  if (base != NULL) {
+    if (base->first != NULL && base->size == 1) {
+      if (func != NULL)
+        func(base->last->info);
+      free(base->last);
+      base->last = NULL;
+      base->first = NULL;
+      base->size = base->size - 1;
+      return 1;
+    }
+    
+    if (base->first != NULL && base->size > 1) {
+      aux = base->last->previous;
+      aux->next = NULL;
+      if (func != NULL)
+        func(base->last->info);
+      free(base->last);
+      base->last = aux;
+      base->size = base->size - 1;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int removeMiddleL(List list, int p, eraseItemL func) {
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  int i, j;
+  if (p <= 0) {
+    return 0;
+  }
+  j = lengthL(list);
+  if (p == 1) {
+    removeBeginL(list, func);
+    return 1;
+  } else if (p >= j) {
+    removeEndL(list, func);
+    return 1;
+  } else {
+    if (base != NULL) {
+      if (base->first != NULL) {
+        aux = base->first;
+        base->size = base->size - 1;
+        for (i = 1; i <= j; i++) {
+          if (i == p) {
+            if (func != NULL)
+              func(aux->info);
+            aux->previous->next = aux->next;
+            aux->next->previous = aux->previous;
+            free(aux);
+            break;
+          }
+          aux = aux->next;
+        }
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
+Item getItemL(List list, int p) {
+  Base *base = (Base *)list;
+  int i, j;
+  Element *aux = NULL;
+  Item item = NULL;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      aux = base->first;
+      j = lengthL(list);
+      if (p <= 0 || p > j) {
+        return NULL;
+      }
+      for (i = 1; i <= j; i++) {
+        if (i == p) {
+          item = aux->info;
+          return item;
+        }
+        aux = aux->next;
+      }
+    }
+  }
+  return NULL;
+}
+
+
+int eraseListL(List list, eraseItemL func) {
+  Base *base = (Base *)list;
+  Element *aux, *aux2;
+  int i, j;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      aux = base->first;
+      j = lengthL(list);
+      for (i = 1; i <= j; i++) {
+        aux2 = aux;
+        aux = aux->next;
+        if (func != NULL)
+          func(aux2->info);
+        free(aux2);
+      }
+      base->first = NULL;
+      base->last = NULL;
+      base->size = 0;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void eraseBase(List list) {
+  Base *base = (Base *)list;
+  if (base != NULL) {
+    free(base);
+  }
+}
+
+
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
 int *
 create_user_1_svc(char **argp, struct svc_req *rqstp)
@@ -73,12 +327,7 @@ new_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result = 0;
 
-	printf("Passei Aqui1\n");
-	printf("%s", argp->(username));
-	printf("Passei Aqui2\n");
-	
-
-	return &result;
+ 	return &result;
 }
 
 int *
