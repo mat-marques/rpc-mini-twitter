@@ -6,67 +6,19 @@
 #include "twitter.h"
 
 bool_t
-xdr_followUser (XDR *xdrs, followUser *objp)
+xdr_data (XDR *xdrs, data *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->username, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->username, ~0))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->otherName, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->otherName, ~0))
 		 return FALSE;
-	return TRUE;
-}
-
-bool_t
-xdr_post (XDR *xdrs, post *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_pointer (xdrs, (char **)&objp->username, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->text, ~0))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->topic, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->topic, ~0))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->text, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	return TRUE;
-}
-
-bool_t
-xdr_topic (XDR *xdrs, topic *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_pointer (xdrs, (char **)&objp->username, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->topic, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	return TRUE;
-}
-
-bool_t
-xdr_retrieve (XDR *xdrs, retrieve *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_pointer (xdrs, (char **)&objp->username, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->topic, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->timestamp, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	return TRUE;
-}
-
-bool_t
-xdr_twitteMessage (XDR *xdrs, twitteMessage *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_pointer (xdrs, (char **)&objp->username, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->text, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->topic, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->timestamp, ~0))
 		 return FALSE;
 	return TRUE;
 }

@@ -18,16 +18,13 @@ void
 new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 {
 	int *result;
-	topic t;
+	data t;
 
 	t.username = (char*) malloc(strlen(username) * sizeof(char));
 	t.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
 
 	strcpy(t.username, username);
 	strcpy(t.topic, topicParam);
-	
-	printf("%s\n", t.username);
-	printf("%s\n", t.topic);
 	
 	result = new_topic_1(&t, clnt);
 
@@ -52,7 +49,7 @@ void
 unfollow_interface(CLIENT *clnt, char *username, char *otherName)
 {
 	int *result;
-	followUser f;
+	data f;
 
 	f.username = (char*) malloc(strlen(username) * sizeof(char));
 	f.otherName = (char*) malloc(strlen(otherName) * sizeof(char));
@@ -82,7 +79,7 @@ void
 retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *timestamp)
 {
 	char **result;
-	retrieve r;
+	data r;
 
 	r.username = (char*) malloc(strlen(username) * sizeof(char));
 	r.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
@@ -109,7 +106,7 @@ void
 twitte_interface(CLIENT *clnt, char *username, char *text)
 {
 	int *result;
-	twitteMessage t;
+	data t;
 
 	t.username = (char*) malloc(strlen(username) * sizeof(char));
 	t.text = (char*) malloc(strlen(text) * sizeof(char));

@@ -2,45 +2,14 @@
 #define VERSION_NUMBER 1
 
 /* tipo de dado que será passado aos procedimentos remotos */
-struct followUser
+
+struct data
 {
-
-    char *username;
-    char *otherName;
-
-};
-
-struct post
-{
-
-    char *username;
-    char *topic;
-    char *text;
-
-};
-
-struct topic  
-{
-
-    char *username;
-    char *topic;
-
-};
-
-struct retrieve  
-{
-
-    char *username;
-    char *topic;
-    char *timestamp;
-
-};
-
-struct twitteMessage
-{
-    char *username;
-    char *text;
-    char *topic;
+    string username<>;
+    string otherName<>;
+    string text<>;
+    string topic<>;
+    string timestamp<>;
 };
 
 /* Definição da interface que será oferecida aos clientes */
@@ -54,19 +23,19 @@ program TWITTER_PROG
 
         string list_users(void) = 2;
 
-        int follow (followUser) = 3;
+        int follow (data) = 3;
 
-        int post_topic(post) = 4;
+        int post_topic(data) = 4;
 
         string hashtags(void) = 5;
 
-        int new_topic(topic) = 6;
+        int new_topic(data) = 6;
 
-        int unfollow (followUser) = 7;
+        int unfollow (data) = 7;
 
-        string retrievetopic(retrieve) = 8;
+        string retrievetopic(data) = 8;
 
-        int twitte(twitteMessage) = 9;
+        int twitte(data) = 9;
 
     } = VERSION_NUMBER;
 

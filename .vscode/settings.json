@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "system_error": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "string_view": "c"
     }
 }

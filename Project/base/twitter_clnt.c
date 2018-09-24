@@ -40,13 +40,13 @@ list_users_1(void *argp, CLIENT *clnt)
 }
 
 int *
-follow_1(followUser *argp, CLIENT *clnt)
+follow_1(data *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, follow,
-		(xdrproc_t) xdr_followUser, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -55,13 +55,13 @@ follow_1(followUser *argp, CLIENT *clnt)
 }
 
 int *
-post_topic_1(post *argp, CLIENT *clnt)
+post_topic_1(data *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, post_topic,
-		(xdrproc_t) xdr_post, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -85,13 +85,13 @@ hashtags_1(void *argp, CLIENT *clnt)
 }
 
 int *
-new_topic_1(topic *argp, CLIENT *clnt)
+new_topic_1(data *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, new_topic,
-		(xdrproc_t) xdr_topic, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -100,13 +100,13 @@ new_topic_1(topic *argp, CLIENT *clnt)
 }
 
 int *
-unfollow_1(followUser *argp, CLIENT *clnt)
+unfollow_1(data *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, unfollow,
-		(xdrproc_t) xdr_followUser, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -115,13 +115,13 @@ unfollow_1(followUser *argp, CLIENT *clnt)
 }
 
 char **
-retrievetopic_1(retrieve *argp, CLIENT *clnt)
+retrievetopic_1(data *argp, CLIENT *clnt)
 {
 	static char *clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, retrievetopic,
-		(xdrproc_t) xdr_retrieve, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_wrapstring, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -130,13 +130,13 @@ retrievetopic_1(retrieve *argp, CLIENT *clnt)
 }
 
 int *
-twitte_1(twitteMessage *argp, CLIENT *clnt)
+twitte_1(data *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, twitte,
-		(xdrproc_t) xdr_twitteMessage, (caddr_t) argp,
+		(xdrproc_t) xdr_data, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);

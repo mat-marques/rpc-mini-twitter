@@ -21,12 +21,12 @@ twitter_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
 		char *create_user_1_arg;
-		followUser follow_1_arg;
-		post post_topic_1_arg;
-		topic new_topic_1_arg;
-		followUser unfollow_1_arg;
-		retrieve retrievetopic_1_arg;
-		twitteMessage twitte_1_arg;
+		data follow_1_arg;
+		data post_topic_1_arg;
+		data new_topic_1_arg;
+		data unfollow_1_arg;
+		data retrievetopic_1_arg;
+		data twitte_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -50,13 +50,13 @@ twitter_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case follow:
-		_xdr_argument = (xdrproc_t) xdr_followUser;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) follow_1_svc;
 		break;
 
 	case post_topic:
-		_xdr_argument = (xdrproc_t) xdr_post;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) post_topic_1_svc;
 		break;
@@ -68,25 +68,25 @@ twitter_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case new_topic:
-		_xdr_argument = (xdrproc_t) xdr_topic;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) new_topic_1_svc;
 		break;
 
 	case unfollow:
-		_xdr_argument = (xdrproc_t) xdr_followUser;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) unfollow_1_svc;
 		break;
 
 	case retrievetopic:
-		_xdr_argument = (xdrproc_t) xdr_retrieve;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) retrievetopic_1_svc;
 		break;
 
 	case twitte:
-		_xdr_argument = (xdrproc_t) xdr_twitteMessage;
+		_xdr_argument = (xdrproc_t) xdr_data;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) twitte_1_svc;
 		break;

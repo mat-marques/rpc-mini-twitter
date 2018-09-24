@@ -14,7 +14,6 @@
 
 
 
-
 void
 new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 {
@@ -24,9 +23,12 @@ new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 	t.username = (char*) malloc(strlen(username) * sizeof(char));
 	t.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
 
-	strcmp(t.username, username);
-	strcmp(t.topic, topicParam);
-
+	strcpy(t.username, username);
+	strcpy(t.topic, topicParam);
+	
+	printf("%s\n", t.username);
+	printf("%s\n", t.topic);
+	
 	result = new_topic_1(&t, clnt);
 
 	free(t.username);
@@ -36,8 +38,7 @@ new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
 	}
-
-	if(*result == 1){
+	else if(*result == 1){
 		printf ("Tópico criado com sucesso!\n");
 	}
 	else 
@@ -56,8 +57,8 @@ unfollow_interface(CLIENT *clnt, char *username, char *otherName)
 	f.username = (char*) malloc(strlen(username) * sizeof(char));
 	f.otherName = (char*) malloc(strlen(otherName) * sizeof(char));
 
-	strcmp(f.username, username);
-	strcmp(f.otherName, otherName);
+	strcpy(f.username, username);
+	strcpy(f.otherName, otherName);
 
 	result = unfollow_1(&f, clnt);
 
@@ -68,8 +69,7 @@ unfollow_interface(CLIENT *clnt, char *username, char *otherName)
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
 	}
-
-	if(*result == 1){
+	else if(*result == 1){
 		printf ("Unfollow realizado com sucesso!\n");
 	}
 	else 
@@ -88,9 +88,9 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	r.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
 	r.timestamp = (char*) malloc(strlen(timestamp) * sizeof(char));
 
-	strcmp(r.username, username);
-	strcmp(r.topic, topicParam);
-	strcmp(r.timestamp, timestamp);
+	strcpy(r.username, username);
+	strcpy(r.topic, topicParam);
+	strcpy(r.timestamp, timestamp);
 
 	result = retrievetopic_1(&r, clnt);
 
@@ -114,8 +114,8 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 	t.username = (char*) malloc(strlen(username) * sizeof(char));
 	t.text = (char*) malloc(strlen(text) * sizeof(char));
 
-	strcmp(t.username, username);
-	strcmp(t.text, text);
+	strcpy(t.username, username);
+	strcpy(t.text, text);
 
 	result = twitte_1(&t, clnt);
 
@@ -126,8 +126,7 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
 	}
-
-	if(*result == 1){
+	else if(*result == 1){
 		printf ("Twitte criado com sucesso!\n");
 	}
 	else 
@@ -167,8 +166,6 @@ void readAllFile(char *fileName){
 
 
 void verifyParams(int argc, char **argv){
-	
-	FILE *file = NULL;
 
 	if(strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-help") == 0){
 
@@ -177,10 +174,11 @@ void verifyParams(int argc, char **argv){
 		exit (1);
 	}
 
-	if (argc >= 3){
+	if (argc < 3){
 			fprintf (stderr,"Usage: %s hostname [function_name] [params1, ..., paramsn]\n",argv[0]);
 			exit (1);
 	}
+
 }
 
 void menu(int argc, char **argv){
@@ -195,18 +193,19 @@ void menu(int argc, char **argv){
 		exit(1);
 	}
 
-	if(strcmp(argv[2],"new_topic") == 0 && argc >= 4)
+	printf("%s\n", argv[2]);
+	if(strcmp(argv[2],"new_topic") == 0 && argc > 4)
 	{
 		new_topic_interface(clnt, argv[3], argv[4]);
 	}
-	else if(strcmp(argv[2],"unfollow") == 0 && argc >= 4)
+	else if(strcmp(argv[2],"unfollow") == 0 && argc > 4)
 	{
 		unfollow_interface(clnt, argv[3], argv[4]);
 	}
-	if(strcmp(argv[2],"retrievetopic") == 0 && argc >= 5){
+	if(strcmp(argv[2],"retrievetopic") == 0 && argc > 5){
 		retrievetopic_interface(clnt, argv[3], argv[4], argv[5]);
 	}
-	else if(strcmp(argv[2],"twitte") == 0 && argc >= 4)
+	else if(strcmp(argv[2],"twitte") == 0 && argc > 4)
 	{
 		twitte_interface(clnt, argv[3], argv[4]);
 	}
@@ -221,7 +220,7 @@ main (int argc, char *argv[])
 {
 
 	verifyParams(argc, argv);
-
+	printf("Passei Aqui\n");
 	menu(argc, argv);
 
 	return (0);

@@ -14,38 +14,14 @@ extern "C" {
 #endif
 
 
-struct followUser {
+struct data {
 	char *username;
 	char *otherName;
-};
-typedef struct followUser followUser;
-
-struct post {
-	char *username;
-	char *topic;
 	char *text;
-};
-typedef struct post post;
-
-struct topic {
-	char *username;
-	char *topic;
-};
-typedef struct topic topic;
-
-struct retrieve {
-	char *username;
 	char *topic;
 	char *timestamp;
 };
-typedef struct retrieve retrieve;
-
-struct twitteMessage {
-	char *username;
-	char *text;
-	char *topic;
-};
-typedef struct twitteMessage twitteMessage;
+typedef struct data data;
 
 #define TWITTER_PROG 12345678
 #define TWITTER_VERSION 1
@@ -58,26 +34,26 @@ extern  int * create_user_1_svc(char **, struct svc_req *);
 extern  char ** list_users_1(void *, CLIENT *);
 extern  char ** list_users_1_svc(void *, struct svc_req *);
 #define follow 3
-extern  int * follow_1(followUser *, CLIENT *);
-extern  int * follow_1_svc(followUser *, struct svc_req *);
+extern  int * follow_1(data *, CLIENT *);
+extern  int * follow_1_svc(data *, struct svc_req *);
 #define post_topic 4
-extern  int * post_topic_1(post *, CLIENT *);
-extern  int * post_topic_1_svc(post *, struct svc_req *);
+extern  int * post_topic_1(data *, CLIENT *);
+extern  int * post_topic_1_svc(data *, struct svc_req *);
 #define hashtags 5
 extern  char ** hashtags_1(void *, CLIENT *);
 extern  char ** hashtags_1_svc(void *, struct svc_req *);
 #define new_topic 6
-extern  int * new_topic_1(topic *, CLIENT *);
-extern  int * new_topic_1_svc(topic *, struct svc_req *);
+extern  int * new_topic_1(data *, CLIENT *);
+extern  int * new_topic_1_svc(data *, struct svc_req *);
 #define unfollow 7
-extern  int * unfollow_1(followUser *, CLIENT *);
-extern  int * unfollow_1_svc(followUser *, struct svc_req *);
+extern  int * unfollow_1(data *, CLIENT *);
+extern  int * unfollow_1_svc(data *, struct svc_req *);
 #define retrievetopic 8
-extern  char ** retrievetopic_1(retrieve *, CLIENT *);
-extern  char ** retrievetopic_1_svc(retrieve *, struct svc_req *);
+extern  char ** retrievetopic_1(data *, CLIENT *);
+extern  char ** retrievetopic_1_svc(data *, struct svc_req *);
 #define twitte 9
-extern  int * twitte_1(twitteMessage *, CLIENT *);
-extern  int * twitte_1_svc(twitteMessage *, struct svc_req *);
+extern  int * twitte_1(data *, CLIENT *);
+extern  int * twitte_1_svc(data *, struct svc_req *);
 extern int twitter_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -114,18 +90,10 @@ extern int twitter_prog_1_freeresult ();
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
-extern  bool_t xdr_followUser (XDR *, followUser*);
-extern  bool_t xdr_post (XDR *, post*);
-extern  bool_t xdr_topic (XDR *, topic*);
-extern  bool_t xdr_retrieve (XDR *, retrieve*);
-extern  bool_t xdr_twitteMessage (XDR *, twitteMessage*);
+extern  bool_t xdr_data (XDR *, data*);
 
 #else /* K&R C */
-extern bool_t xdr_followUser ();
-extern bool_t xdr_post ();
-extern bool_t xdr_topic ();
-extern bool_t xdr_retrieve ();
-extern bool_t xdr_twitteMessage ();
+extern bool_t xdr_data ();
 
 #endif /* K&R C */
 

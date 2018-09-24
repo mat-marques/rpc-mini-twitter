@@ -1,1 +1,28 @@
-colocar instruções para auxiliar o usuário a utilizar a aplicação
+A baixo está listados as funções que são permitidas ao usuário
+manipular. A sequência de comandos se elabora na seguinte ordem
+[nome_funcao] [params1,..., paramsn]
+Os parâmetros devem ser desconsiderados
+
+Lista de funções:
+
+[create_user] [@username] [Descrição: Cadastra o usuário como participante do twitter]
+
+[list_users] [] [Descrição: Listar usuários cadastrados no micro twitter]
+
+[follow] [@username, @username] [Descrição: Usuário torna-se seguidor de outro usuário]
+
+[post_topic] [@username, topico, texto] [Descrição: Usuários enviam post em um determinado tópico]
+
+[hashtags] [] [usuário solicita lista de tópicos (ou hashtags) cadastrados]
+
+[new_topic] [@username, topic] [Descrição: Usuário envia uma solicitação de criação de novo tópico]
+
+[unfollow] [@username, @username] [Descrição: Usuário deixa de seguir e de receber posts de um determinado usuário]
+
+[retrievetopic] [@username, tópico, timestamp] [Descrição: O usuário recupera todos os posts, apenas do tópico identificado desde a data especificada até a data atual]
+
+[twitte] [@username,text] [Descrição: Usuário envia um post (Twittar)]
+
+
+Exemplo de chamada de procedimento:
+./twitter_cliente localhost create_user @nome

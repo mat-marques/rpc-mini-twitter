@@ -37,7 +37,7 @@ list_users_1_svc(void *argp, struct svc_req *rqstp)
 }
 
 int *
-follow_1_svc(followUser *argp, struct svc_req *rqstp)
+follow_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
 
@@ -49,7 +49,7 @@ follow_1_svc(followUser *argp, struct svc_req *rqstp)
 }
 
 int *
-post_topic_1_svc(post *argp, struct svc_req *rqstp)
+post_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
 
@@ -73,33 +73,38 @@ hashtags_1_svc(void *argp, struct svc_req *rqstp)
 }
 
 int *
-new_topic_1_svc(topic *argp, struct svc_req *rqstp)
+new_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int  result = 0;
 	// MYSQL *con = mysqlConnector(host, user, password, dbName);
-	char *query1 = NULL, *query2 = NULL, *query3 = NULL, *query4 = NULL;
+	// char *query1 = NULL, *query2 = NULL, *query3 = NULL, *query4 = NULL;
 
     // if (con == NULL) 
     // {
     //     exit(1);
     // }
-	query1 = strcat("INSERT INTO topic (topic, id_user) VALUES(", argp->topic);
-	query2 = strcat(query1, ", ");
-	query3 = strcat(query2, argp->username);
-	query4 = strcat(query3, ");");
+	printf("Passei Aqui\n");
+	printf("%s", argp->username);
+	
+	
+	// query1 = strcat("INSERT INTO topic (topic, id_user) VALUES(", argp->topic);
+	// query2 = strcat(query1, ", ");
+	// query3 = strcat(query2, argp->username);
+	// query4 = strcat(query3, ");");
 
 	// result = insertDate(con, query4);
-	printf("%s", query4);
-	free(query1);
-	free(query2);
-	free(query3);
-	free(query4);
+	
+	// printf("%s", query4);
+	// free(query1);
+	// free(query2);
+	// free(query3);
+	// free(query4);
 
 	return &result;
 }
 
 int *
-unfollow_1_svc(followUser *argp, struct svc_req *rqstp)
+unfollow_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
 	// MYSQL *con = mysqlConnector(host, user, password, dbName);
@@ -126,7 +131,7 @@ unfollow_1_svc(followUser *argp, struct svc_req *rqstp)
 }
 
 char **
-retrievetopic_1_svc(retrieve *argp, struct svc_req *rqstp)
+retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static char * result;
 
@@ -138,7 +143,7 @@ retrievetopic_1_svc(retrieve *argp, struct svc_req *rqstp)
 }
 
 int *
-twitte_1_svc(twitteMessage *argp, struct svc_req *rqstp)
+twitte_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
 	// MYSQL *con = mysqlConnector(host, user, password, dbName);
@@ -155,10 +160,10 @@ twitte_1_svc(twitteMessage *argp, struct svc_req *rqstp)
 	free(query1);
 	free(query2);
 	free(query3);
-	query1 = strcat(query4, timestamp);
-	query2 = strcat(query1, "', '");
-	query3 = strcat(query2, argp->topic);
-	free(query4);
+	query1 = strctwitteMessageestamp);
+	query2 = strctwitteMessage '");
+	query3 = strctwitteMessagep->topic);
+	free(query4);twitteMessage
 	query4 = strcat(query3, "');");
 
 
