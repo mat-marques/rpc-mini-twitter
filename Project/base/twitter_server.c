@@ -271,9 +271,27 @@ List TWITTE = NULL;
 List FOLLOWERS = NULL;
 
 
+int compareUsers(Item item1, Item item2){
+	data *data1 = (data*) item1;
+	data *data2 = (data*) item2;
 
+	if(strcmp(data1->username, data2->username) == 0){
+		return 1;
+	}
 
+	return 0;
+}
 
+int compareFollewers(Item item1, Item item2){
+	data *data1 = (data*) item1;
+	data *data2 = (data*) item2;
+
+	if((strcmp(data1->username, data2->username) == 0) && (strcmp(data1->otherName, data2->otherName) == 0) ){
+		return 1;
+	}
+
+	return 0;
+}
 
 
 //////////////////////////////////////////////////
@@ -287,7 +305,7 @@ int *
 create_user_1_svc(char **argp, struct svc_req *rqstp)
 {
 	static int  result;
-
+	
 	/*
 	 * insert server code here
 	 */
@@ -311,7 +329,7 @@ int *
 follow_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
-
+	
 	/*
 	 * insert server code here
 	 */
@@ -347,6 +365,37 @@ int *
 new_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result = 0;
+	data *t = NULL;
+
+	TOPIC = startList(TOPIC);
+
+	if(!isEmpty(TOPIC)){
+		
+		t = (data*) malloc(sizeof(data));
+
+		if(t == NULL){
+			return &result;
+		}
+
+		t->username = (char*) malloc(strlen(argp->username) * sizeof(char));
+		if(t->username == NULL){
+			return &result;
+		}
+
+		t->topic = (char*) malloc(strlen(argp->topic) * sizeof(char));
+		if(t->topic == NULL){
+			return &result;
+		}
+
+		strcpy(t->username, argp->username);
+		strcpy(t->topic, argp->topic);
+
+		if(insertEndL(TOPIC, t) != 1){
+			return &result;
+		}
+
+		result = 1;
+	}
 
  	return &result;
 }
@@ -354,29 +403,117 @@ new_topic_1_svc(data *argp, struct svc_req *rqstp)
 int *
 unfollow_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int  result = 0;
+	data *t = NULL;
+	data *p = NULL;
 
+	FOLLOWERS = startList(FOLLOWERS);
 
-	return &result;
+	if(!isEmpty(FOLLOWERS)){
+		
+		t = (data*) malloc(sizeof(data));
+
+		if(t == NULL){
+			return &result;
+		}
+
+		t->username = (char*) malloc(strlen(argp->username) * sizeof(char));
+		if(t->username == NULL){
+			return &result;
+		}
+
+		t->otherName = (char*) malloc(strlen(argp->otherName) * sizeof(char));
+		if(t->otherName == NULL){
+			return &result;
+		}
+
+		strcpy(t->username, argp->username);
+		strcpy(t->otherName, argp->otherName);
+
+		p = searchItemL(FOLLOWERS, t, compareFollewers);
+
+		if(p == NULL){
+			return &result;
+		}
+
+		result = 1;
+	}
+
+ 	return &result;
 }
 
 char **
 retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static char * result;
+	static int  result = 0;
+	data *t = NULL;
 
-	/*
-	 * insert server code here
-	 */
+	TOPIC = startList(TOPIC);
 
-	return &result;
+	if(!isEmpty(TOPIC)){
+		
+		t = (data*) malloc(sizeof(data));
+
+		if(t == NULL){
+			return &result;
+		}
+
+		t->timestamp = (char*) malloc(strlen(argp->timestamp) * sizeof(char));
+		if(t->timestamp == NULL){
+			return &result;
+		}
+
+		t->topic = (char*) malloc(strlen(argp->topic) * sizeof(char));
+		if(t->topic == NULL){
+			return &result;
+		}
+
+		strcpy(t->timestamp, argp->timestamp);
+		strcpy(t->topic, argp->topic);
+
+		
+
+		result = 1;
+	}
+
+ 	return &result;
 }
 
 int *
 twitte_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int  result = 0;
+	data *t = NULL;
 
+	TWITTE = startList(TWITTE);
 
-	return &result;
+	if(!isEmpty(TWITTE)){
+		
+		t = (data*) malloc(sizeof(data));
+
+		if(t == NULL){
+			return &result;
+		}
+
+		t->username = (char*) malloc(strlen(argp->username) * sizeof(char));
+		if(t->username == NULL){
+			return &result;
+		}
+
+		t->text = (char*) malloc(strlen(argp->text) * sizeof(char));
+		if(t->text == NULL){
+			return &result;
+		}
+
+		strcpy(t->username, argp->username);
+		strcpy(t->text, argp->text);
+
+		if(insertEndL(TWITTE, t) != 1){
+			return &result;
+		}
+
+		result = 1;
+	}
+
+ 	return &result;
 }
