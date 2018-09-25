@@ -14,17 +14,19 @@
 
 char *userName = NULL;
 
-void 
+int * 
 create_user_interface(CLIENT *clnt, char *username){
 	int *result;
 
 	result = create_user_1(&username, clnt);
 
 	if(*result == 1){
-		printf("Usuário %s criado com sucesso,\n", username);
+		*result = 1;
 	}else{
-		printf("Erro ao criar usuário.\n");
+		*result = 0;
 	}
+
+	return result;
 }
 
 
@@ -95,7 +97,7 @@ hashtags_interface(CLIENT *clnt)
 	}
 	else 
 	{
-		printf("Listagem de Tópicos:\n", *result);
+		printf("Listagem de Tópicos:%s\n", *result);
 	}
 }
 
@@ -187,7 +189,7 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	}
 	else
 	{
-		printf("Listagem de Postagem:\n", *result);
+		printf("Listagem de Postagem:\n%s", *result);
 	}
 
 }
@@ -220,6 +222,52 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 	{
 		printf ("Ocorreu um problema ao criar o twitte! Tente novamente!\n");
 	}	
+}
+
+
+/*
+  Funcao que retorna uma token especifica da string passada
+  a funcao percorre a string procurando por espacos ou fim da string, salvando o que e liso no processo
+  a funcao faz isso um numero n de vezes, retornando a ultima token encontrada
+*/
+char *returnToken(char *s, int n)
+{
+	int i = 0, j, k;
+	char *aux = NULL;
+
+	for(k=0; k<n && i < strlen(s); k++){
+
+		if(aux != NULL){
+			free(aux);
+			aux = NULL;
+		}
+		for(j = 0; s[i]!=' ' && s[i]!='\0'; j++){
+			aux = (char *)realloc(aux, sizeof(char)*(j+2));
+			aux[j] = s[i];
+			aux[j+1] = '\0';
+			i++;
+		}
+    if(s[i] == '\0' && k<n-1){return NULL;}
+		i++;
+	}
+	return aux;
+}
+
+
+void
+printErr(int i){
+	switch(i){
+
+		case 2:
+			printf("Parametros faltando.");
+			break;
+		case 3:
+			printf("Formato suportado: \"@username\"");
+			break;
+		default:
+			printf("Erro desconhecido.\n");
+			break;
+	};
 }
 
 
@@ -274,29 +322,64 @@ void
 menu(int argc, char **argv){
 
 	CLIENT *clnt;
+	int *intResponse;
 	char *function = NULL;
 	char *params = NULL;
+	char *line = NULL;
+	userName = malloc(sizeof(char)*256);
+	line = malloc(sizeof(char)*256);
 
-   	clnt = clnt_create (argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
-
-	if (clnt == (CLIENT *) NULL)
+	clnt = clnt_create(argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
+	if (clnt == NULL)
 	{
 		clnt_pcreateerror (argv[1]);
+		printf("Erro de conexão.\nTente novamente mais tarde.\n");
 		exit(1);
 	}
 
-	create_user_interface(clnt, argv[3]);
+
 
 	while(1){
-		
-		//Ler do console
+		printf("Crie um usuário: ");
+		fgets(userName, 256, stdin);
+		if(userName[0] == '@' && strlen(userName)>1){
+			intResponse = create_user_interface(clnt, userName);
+			if(*intResponse == 1){
+				printf("Usuário criado com sucesso.\n");
+				break;
+			}else{
+				printf("Erro ao criar usuário\n");
+			}
+			
+		}
+	}	
+	
 
-		if(strcmp(function,"exit") == 0)
+	
+
+	
+
+	while(1){
+		printf("\n\n-----------------------\n\n");
+		printf("\"help\" : ajuda/comandos\n\"exit\" : sair\n\n");
+		fgets(line, 256, stdin);
+		line[strlen(line)-1] = '\0';
+		printf("Line: %s\n", line);
+		function = returnToken(line, 1);
+		
+		printf("Function : %s - list_users", function);
+		if(function == NULL){
+			printf("Função desconhecida! Digite help para visualizar as informações permitidas.\n");
+		}
+		else if(strcmp(function, "help") == 0)
+		{
+			readAllFile(fileHelpName);
+		}
+		else if(strcmp(function,"exit") == 0)
 		{
 			exit(1);
 		}
-
-		if(strcmp(function,"hashtag") == 0)
+		else if(strcmp(function,"hashtag") == 0)
 		{
 			hashtags_interface(clnt);
 		}
@@ -315,9 +398,25 @@ menu(int argc, char **argv){
 		{
 			twitte_interface(clnt, argv[3], argv[4]);
 		}
+		else if(strcmp(function, "create_user") == 0){
+			char *aux1 = returnToken(line, 2);
+			if(aux1 == NULL){printErr(2); continue;}
+			if(aux1[0] != '@'){printErr(3); continue;}
+
+			intResponse = create_user_interface(clnt, aux1);
+			if(*intResponse == 1){
+				printf("Usuário criado com sucesso.\n");
+			}else{
+				printf("Erro ao criar usuário.\n");
+			}
+		}
+		else if(strcmp(function, "list_users") == 0)
+		{
+			list_users_interface(clnt);
+		}
 		else
 		{
-			printf("Função desconhecida ou parâmetros faltando! Digite -h para visualizar as informações permitidas.\n");
+			printf("Função desconhecida ou parâmetros faltando! Digite help para visualizar as informações permitidas.\n");
 		}
 
 	}
@@ -328,7 +427,7 @@ int
 main (int argc, char *argv[])
 {
 
-	if (argc < 4){
+	if (argc < 2){
 		fprintf (stderr,"Usage: %s hostname create_user @username\n",argv[0]);
 		exit (1);
 	}
