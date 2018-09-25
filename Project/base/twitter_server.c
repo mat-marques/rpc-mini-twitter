@@ -316,11 +316,10 @@ Posic getPrevious(List list, Posic p) {
 }
 
 List startList(List list){
-  Base *L1 = (Base *)list;
-  if(L1 == NULL){
-    return list;
-  }else{
+  if(list == NULL){
     return createL();
+  }else{
+    return list;
   }
 }
 
@@ -371,6 +370,7 @@ create_user_1_svc(char **argp, struct svc_req *rqstp)
   data *dt;
   int i, length = lengthL(USER);
 
+  if(USER == NULL){printf("\n\n@@@@@@@\n\n");}
   Element *element = ((Base *)USER)->first;
   while(element != NULL){
     data *dt = (data *)(element->info);
@@ -563,7 +563,7 @@ hashtags_1_svc(void *argp, struct svc_req *rqstp)
         {
           result = (char*) malloc(strlen(p->topic) * sizeof(char));
           if(result != NULL){
-            strcpy(result, strlen(p->topic));
+            strcpy(result, p->topic);
           }
         }
       }
@@ -699,7 +699,7 @@ retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
           {
             result = (char*) malloc(strlen(p->text) * sizeof(char));
             if(result != NULL){
-              strcpy(result, strlen(p->text));
+              strcpy(result, p->text);
             }
           }
         }
