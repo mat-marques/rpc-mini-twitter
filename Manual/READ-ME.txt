@@ -74,8 +74,9 @@ O comando EXIT finaliza a aplicação.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 Melhoria apontadas para a aplicação.
 1) Implementar o envio dos twittes para os seguidores de um determinado usuário (twitte);
-2) Implementar o multithread na aplicação;
-3) Utilizar banco de dados ao invés do armazenamento local. Para essa melhoria precisaremos selecionar
+2) retornar os post pelo timestamp (retrievetopic);
+3) Implementar o multithread na aplicação;
+4) Utilizar banco de dados ao invés do armazenamento local. Para essa melhoria precisaremos selecionar
 um SGBD e montar a estrutura da base de dados. Depois, teremos que utilizar bibliotecas disponíveis
 para conectar no banco e manipular os dados. Por fim, modificar os códigos das funções principais no
 servidor para acessar o banco de dados.
