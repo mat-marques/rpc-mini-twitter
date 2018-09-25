@@ -370,7 +370,6 @@ create_user_1_svc(char **argp, struct svc_req *rqstp)
   data *dt;
   int i, length = lengthL(USER);
 
-  if(USER == NULL){printf("\n\n@@@@@@@\n\n");}
   Element *element = ((Base *)USER)->first;
   while(element != NULL){
     data *dt = (data *)(element->info);
@@ -397,7 +396,7 @@ char **
 list_users_1_svc(void *argp, struct svc_req *rqstp)
 {
 	static char * result = NULL;
-
+  result = NULL;
   if(lengthL(USER)==0){
     return &result;
   }
@@ -409,7 +408,7 @@ list_users_1_svc(void *argp, struct svc_req *rqstp)
   printf("Usuários:\n");
   while(element!=NULL){
     dt = (data *)(element->info);
-    printf("%s\n", dt->username);
+    printf("%s(%d)", dt->username, lengthL(USER));
     if(result == NULL){
       result = malloc(sizeof(char)*(strlen(dt->username) + 2));
       strcpy(result, dt->username);
@@ -424,6 +423,7 @@ list_users_1_svc(void *argp, struct svc_req *rqstp)
     element = element->next;
   }
 
+  printf("%s\n", result);
 	return &result;
 }
 
