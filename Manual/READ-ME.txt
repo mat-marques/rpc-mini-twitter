@@ -1,0 +1,94 @@
+    A aplicação desenvolvida tem como objetivo simular algumas funcionalidades que
+existem no Twiiter. Além disso, o foco principal é construir a aplicação utilizando
+a estrutura para criação de sistema distribuídos RPC, para isso utilizaremos o RPCGEN.
+
+Apresentaremos uma descrição manual de uso do programa do mini-twitter feito.
+Primeiramente, o programa deve ser usado apenas no sistema operacional Linux.
+
+A seguir listaremos os passos para uso da aplicação.
+
+1) Baixar a biblioteca para usar o rpcgen
+    - sudo apt-get install rpcbind
+    - sudo apt install libc-dev-bin
+
+
+2) Baixar os arquivos do projeto do mini-twitter
+
+3) Abrir dois terminais diferentes e rodar o server em um e client em outro.
+    - ./twitter_client  host (Primeiro Terminal)
+    - ./twitter_server  (Segundo Terminal)
+    Dentro do primeiro terminal, o termo host especifica o ip do servidor que o cliente 
+deve se conectar. Caso o servidor esteja em localhost basta digitar localhost, caso esteja
+em outro computador digite o ip desse dispositivo (Ex: xxx.xx.xx.xxx, onde x são números).
+
+Nesse contexto, caso exista um servidor sendo executado em alguma outra máquina e você queira apenas
+se conectar a ela e utilizar as funcionalidades da aplicação, basta executar apenas um terminal com o 
+client e especificar o ip como dito anteriormente.
+
+4) Ao executar o passo 3, você entrará na aplicação e poderá utilizar um conjunto de nove funções
+no mini-twitter. A seguir está listados as funções que são permitidas ao usuário manipular. 
+A sequência de comandos se elabora na seguinte ordem: [nome_funcao] [params1,..., paramsn].
+As chaves devem ser desconsiderados.
+
+[create_user] [@username]
+[Descrição: Cadastra o usuário como participante do twitter]
+
+[list_users] []
+[Descrição: Listar usuários cadastrados no micro twitter]
+
+[follow] [@username]
+[Descrição: Usuário torna-se seguidor de outro usuário]
+
+[post_topic] [topico, texto]
+[Descrição: Usuários enviam post em um determinado tópico]
+
+[hashtags] []
+[usuário solicita lista de tópicos (ou hashtags) cadastrados]
+
+[new_topic] [topic]
+[Descrição: Usuário envia uma solicitação de criação de novo tópico]
+
+[unfollow] [@username]
+[Descrição: Usuário deixa de seguir e de receber posts de um determinado usuário]
+
+[retrievetopic]
+[tópico, timestamp] [Descrição: O usuário recupera todos os posts, apenas do tópico identificado desde a data especificada até a data atual]
+
+[twitte] [text]
+[Descrição: Usuário envia um post (Twittar)]
+
+
+6) Ao entrar na aplicação o usuário deve primeiramente criar um nickname utilizando a função
+create_user. Esse nickname será seu nome de usuário. Caso não seja criado um usuário, você não
+poderá utilizar as demais funções.
+
+
+7) Para utilizar o HELP na aplicação basta digitar help no terminal.
+O passo 3 deve ser executado. 
+
+
+8) Para utilizar o EXIT na aplicação basta digitar exit no terminal.
+O passo 3 deve ser executado.
+O comando EXIT finaliza a aplicação.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+Melhoria apontadas para a aplicação.
+1) Implementar o envio dos twittes para os seguidores de um determinado usuário (twitte);
+2) Implementar o multithread na aplicação;
+3) Utilizar banco de dados ao invés do armazenamento local. Para essa melhoria precisaremos selecionar
+um SGBD e montar a estrutura da base de dados. Depois, teremos que utilizar bibliotecas disponíveis
+para conectar no banco e manipular os dados. Por fim, modificar os códigos das funções principais no
+servidor para acessar o banco de dados.
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+Pontos importantes.
+1) Não foi usado multithread no programa
+2) Não foi realizado a elaboração do teste de desempenho requisitado no trabalho
+
+    
+    
+
+
+
+
