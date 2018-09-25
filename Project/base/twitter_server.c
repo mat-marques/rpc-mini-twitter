@@ -12,6 +12,7 @@
 
 typedef void* List;
 typedef void* Item;
+typedef void* Posic;
 typedef void (*eraseItemL)(Item);
 typedef int (*compareToL)(Item, Item);
 
@@ -253,6 +254,66 @@ void eraseBase(List list) {
   }
 }
 
+void removeItemL(List list, Posic p) {
+  Base *L1 = (Base *)list;
+  Element *No = (Element *)p;
+  Element *aux, *aux2;
+  if (isEmpty(list) == 0) {
+    if (No->previous == NULL) {
+      aux = No->next;
+      L1->first = aux;
+      if (L1->first != NULL) {
+        L1->first->previous = NULL;
+      }
+    } else if (No->next == NULL) {
+      aux = No->previous;
+      L1->last = aux;
+      if (L1->last != NULL) {
+        L1->last->next = NULL;
+      }
+    } else {
+      aux = No->previous;
+      aux2 = No->next;
+      aux->next = aux2;
+      aux2->previous = aux;
+    }
+
+    if (No != NULL) {
+      free(No);
+    }
+    L1->size--;
+  }
+}
+
+Item get(List list, Posic p) {
+  Element *No = (Element *)p;
+  if (isEmpty(list) == 0) {
+    if (No->info != NULL) {
+      return No->info;
+    }
+  }
+  return NULL;
+}
+
+Posic getFirst(List list) {
+  Base *L1 = (Base *)list;
+  return L1->first;
+}
+
+Posic getNext(List list, Posic p) {
+  Element *No = (Element *)p;
+  return No->next;
+}
+
+Posic getLast(List list) {
+  Base *L1 = (Base *)list;
+  return L1->last;
+}
+
+Posic getPrevious(List list, Posic p) {
+  Element *No = (Element *)p;
+  return No->previous;
+}
 
 List startList(List list){
   Base *L1 = (Base *)list;
@@ -352,13 +413,29 @@ post_topic_1_svc(data *argp, struct svc_req *rqstp)
 char **
 hashtags_1_svc(void *argp, struct svc_req *rqstp)
 {
-	static char * result;
+	static char **result = NULL;
+  data *p = NULL;
+  Posic posic;
+  char *string1 = NULL;
 
-	/*
-	 * insert server code here
-	 */
 
-	return &result;
+	TOPIC = startList(TOPIC);
+
+	if(!isEmpty(TOPIC)){
+		
+		posic = getFirst(TOPIC);
+    do{
+      p = (data*) get(TOPIC, posic);
+      if(p != NULL){
+        //Lógica para colocar os tópico em uma string
+      }
+      posic = getNext(TOPIC, posic);
+    }while(posic != NULL);
+
+		result = 1;
+	}
+
+ 	return &result;
 }
 
 int *
@@ -406,6 +483,7 @@ unfollow_1_svc(data *argp, struct svc_req *rqstp)
 	static int  result = 0;
 	data *t = NULL;
 	data *p = NULL;
+  Posic posic = NULL;
 
 	FOLLOWERS = startList(FOLLOWERS);
 
@@ -430,11 +508,16 @@ unfollow_1_svc(data *argp, struct svc_req *rqstp)
 		strcpy(t->username, argp->username);
 		strcpy(t->otherName, argp->otherName);
 
-		p = searchItemL(FOLLOWERS, t, compareFollewers);
-
-		if(p == NULL){
-			return &result;
-		}
+    posic = getFirst(FOLLOWERS);
+    do{
+      p = (data*) get(FOLLOWERS, posic);
+      if(compareFollewers(t, p) == 1){
+        removeItemL(FOLLOWERS, posic);
+        p = NULL;
+        break;
+      }
+      posic = getNext(FOLLOWERS, posic);
+    }while(posic != NULL);
 
 		result = 1;
 	}
@@ -445,33 +528,26 @@ unfollow_1_svc(data *argp, struct svc_req *rqstp)
 char **
 retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result = 0;
-	data *t = NULL;
+	static char **result = NULL;
+  data *p = NULL;
+  Posic posic;
+  char *string1 = NULL;
+
 
 	TOPIC = startList(TOPIC);
 
 	if(!isEmpty(TOPIC)){
 		
-		t = (data*) malloc(sizeof(data));
-
-		if(t == NULL){
-			return &result;
-		}
-
-		t->timestamp = (char*) malloc(strlen(argp->timestamp) * sizeof(char));
-		if(t->timestamp == NULL){
-			return &result;
-		}
-
-		t->topic = (char*) malloc(strlen(argp->topic) * sizeof(char));
-		if(t->topic == NULL){
-			return &result;
-		}
-
-		strcpy(t->timestamp, argp->timestamp);
-		strcpy(t->topic, argp->topic);
-
-		
+		posic = getFirst(TOPIC);
+    do{
+      p = (data*) get(TOPIC, posic);
+      if(p != NULL){
+        if(strcmp(p->topic, argp->topic) == 0){
+          //Lógica para colocar os posts em uma string
+        }
+      }
+      posic = getNext(TOPIC, posic);
+    }while(posic != NULL);
 
 		result = 1;
 	}

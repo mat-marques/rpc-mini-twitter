@@ -13,7 +13,34 @@
 #define fileHelpName "instructions.txt"
 
 
+void
+hashtags_interface(CLIENT *clnt)
+{
+	char **result;
+	int i = 0;
+	result = hashtags_1(NULL, clnt);
 
+	if (result == NULL){
+		printf ("Problemas ao chamar a função remota\n");
+		exit (1);
+	}
+	else 
+	{
+		while(*(result+i) != NULL)
+		{
+			printf("%s\n", *(result+i));
+			i++;
+		}
+		
+		i = 0;
+		while(*(result+i) != NULL)
+		{
+			free(result+i);
+			i++;
+		}
+		free(result);
+	}
+}
 
 void
 new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
@@ -108,6 +135,14 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 			printf("%s\n", *(result+i));
 			i++;
 		}
+
+		i = 0;
+		while(*(result+i) != NULL)
+		{
+			free(result+i);
+			i++;
+		}
+		free(result);
 	}
 
 }
@@ -200,8 +235,11 @@ void menu(int argc, char **argv){
 		exit(1);
 	}
 
-	printf("%s\n", argv[2]);
-	if(strcmp(argv[2],"new_topic") == 0 && argc > 4)
+	if(strcmp(argv[2],"hashtag") == 0 && argc > 3)
+	{
+		hashtags_interface(clnt);
+	}
+	else if(strcmp(argv[2],"new_topic") == 0 && argc > 4)
 	{
 		new_topic_interface(clnt, argv[3], argv[4]);
 	}

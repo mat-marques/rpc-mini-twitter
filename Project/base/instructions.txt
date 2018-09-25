@@ -9,19 +9,19 @@ Lista de funções:
 
 [list_users] [] [Descrição: Listar usuários cadastrados no micro twitter]
 
-[follow] [@username, @username] [Descrição: Usuário torna-se seguidor de outro usuário]
+[follow] [@username] [Descrição: Usuário torna-se seguidor de outro usuário]
 
-[post_topic] [@username, topico, texto] [Descrição: Usuários enviam post em um determinado tópico]
+[post_topic] [topico, texto] [Descrição: Usuários enviam post em um determinado tópico]
 
 [hashtags] [] [usuário solicita lista de tópicos (ou hashtags) cadastrados]
 
-[new_topic] [@username, topic] [Descrição: Usuário envia uma solicitação de criação de novo tópico]
+[new_topic] [topic] [Descrição: Usuário envia uma solicitação de criação de novo tópico]
 
-[unfollow] [@username, @username] [Descrição: Usuário deixa de seguir e de receber posts de um determinado usuário]
+[unfollow] [@username] [Descrição: Usuário deixa de seguir e de receber posts de um determinado usuário]
 
-[retrievetopic] [@username, tópico, timestamp] [Descrição: O usuário recupera todos os posts, apenas do tópico identificado desde a data especificada até a data atual]
+[retrievetopic] [tópico, timestamp] [Descrição: O usuário recupera todos os posts, apenas do tópico identificado desde a data especificada até a data atual]
 
-[twitte] [@username,text] [Descrição: Usuário envia um post (Twittar)]
+[twitte] [text] [Descrição: Usuário envia um post (Twittar)]
 
 
 Exemplo de chamada de procedimento:
