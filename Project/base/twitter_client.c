@@ -43,6 +43,7 @@ list_users_interface(CLIENT *clnt){
 	}else{
 		printf("Usuários:\n%s", *users);
 	}
+	free(*users);
 }
 
 void
@@ -364,10 +365,10 @@ menu(int argc, char **argv){
 		printf("\"help\" : ajuda/comandos\n\"exit\" : sair\n\n");
 		fgets(line, 256, stdin);
 		line[strlen(line)-1] = '\0';
-		printf("Line: %s\n", line);
 		function = returnToken(line, 1);
 		
-		printf("Function : %s - list_users", function);
+		
+
 		if(function == NULL){
 			printf("Função desconhecida! Digite help para visualizar as informações permitidas.\n");
 		}
@@ -404,6 +405,8 @@ menu(int argc, char **argv){
 			if(aux1[0] != '@'){printErr(3); continue;}
 
 			intResponse = create_user_interface(clnt, aux1);
+			system("clear");
+
 			if(*intResponse == 1){
 				printf("Usuário criado com sucesso.\n");
 			}else{
