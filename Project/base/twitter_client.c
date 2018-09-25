@@ -12,6 +12,73 @@
 
 #define fileHelpName "instructions.txt"
 
+void 
+create_user_interface(CLIENT *clnt, char *username){
+	int *result;
+
+	result = create_user_1(&username, clnt);
+
+	if(*result == 1){
+		printf("Usuário %s criado com sucesso,\n", username);
+	}else{
+		printf("Erro ao criar usuário.\n");
+	}
+}
+
+
+void 
+list_users_interface(CLIENT *clnt){
+	int *result;
+	char **users;
+	data *dt;
+	
+	users = list_users_1(dt, clnt);
+
+	if(users == NULL){
+		printf("Nenhum usuário cadastrado.");
+	}else{
+		printf("Usuários:\n%s", *users);
+	}
+}
+
+void
+follow_interface(CLIENT *clnt, char *username, char *otherName)
+{
+	int *result;
+	data *dt = malloc(sizeof(data));
+	dt->username = malloc(sizeof(char)*(strlen(username)+1));
+	dt->otherName = mem_alloc(sizeof(char)*(strlen(otherName)+1));
+	strcpy(dt->username, username);
+	strcpy(dt->otherName, otherName);
+
+	result = follow_1(dt, clnt);
+
+	if(*result == 1){
+		printf("Seguindo %s", otherName);
+	}else{
+		printf("Erro ao seguir %s", otherName);
+	}
+
+}
+
+void post_topic_interface(CLIENT *clnt, char *username, char *topic, char *text){
+	int *result;
+	data *d = malloc(sizeof(data));
+	d->username = malloc(sizeof(char)*(strlen(username) + 1));
+	d->topic = malloc(sizeof(char)*(strlen(topic) + 1));
+	d->text = malloc(sizeof(char)*(strlen(text) + 1));
+	strcpy(d->username, username);
+	strcpy(d->topic, topic);
+	strcpy(d->text, text);
+
+	result = post_topic_1(d, clnt);
+
+	if(*result == 1){
+		printf("Post criado com sucesso,\n");
+	}else{
+		printf("Erro ao criar topico.\n");
+	}
+}
 
 void
 hashtags_interface(CLIENT *clnt)
@@ -26,19 +93,7 @@ hashtags_interface(CLIENT *clnt)
 	}
 	else 
 	{
-		while(*(result+i) != NULL)
-		{
-			printf("%s\n", *(result+i));
-			i++;
-		}
-		
-		i = 0;
-		while(*(result+i) != NULL)
-		{
-			free(result+i);
-			i++;
-		}
-		free(result);
+		printf("Listagem de Tópicos:\n", *result);
 	}
 }
 
@@ -130,19 +185,7 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	}
 	else
 	{
-		while(*(result+i) != NULL)
-		{
-			printf("%s\n", *(result+i));
-			i++;
-		}
-
-		i = 0;
-		while(*(result+i) != NULL)
-		{
-			free(result+i);
-			i++;
-		}
-		free(result);
+		printf("Listagem de Postagem:\n", *result);
 	}
 
 }

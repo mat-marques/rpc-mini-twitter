@@ -3,6 +3,7 @@
     "files.associations": {
         "system_error": "c",
         "*.tcc": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "istream": "c"
     }
 }

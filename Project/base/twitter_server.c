@@ -328,6 +328,7 @@ List startList(List list){
 
 List USER = NULL;
 List TOPIC = NULL;
+List POST = NULL;
 List TWITTE = NULL;
 List FOLLOWERS = NULL;
 
@@ -366,10 +367,28 @@ int *
 create_user_1_svc(char **argp, struct svc_req *rqstp)
 {
 	static int  result;
-	
-	/*
-	 * insert server code here
-	 */
+  USER = startList(USER);
+  data *dt;
+  int i, length = lengthL(USER);
+
+  Element *element = ((Base *)USER)->first;
+  while(element != NULL){
+    data *dt = (data *)(element->info);
+    if(strcmp(dt->username, *argp)==0){
+      printf("Erro ao criar usuário %s.", dt->username);
+      result = 0;
+      return &result;
+    }else{
+      element = element->next;
+    }
+  }
+  dt = malloc(sizeof(data));
+  dt->username = malloc((strlen(*argp)+1)*sizeof(char));
+  strcpy(dt->username, *argp);
+
+  result = insertEndL(USER, dt);
+
+  printf("Usuário %s criado.\n", dt->username);
 
 	return &result;
 }
@@ -377,11 +396,33 @@ create_user_1_svc(char **argp, struct svc_req *rqstp)
 char **
 list_users_1_svc(void *argp, struct svc_req *rqstp)
 {
-	static char * result;
+	static char * result = NULL;
 
-	/*
-	 * insert server code here
-	 */
+  if(lengthL(USER)==0){
+    return &result;
+  }
+
+  char *aux;
+  USER = startList(USER);
+  data *dt;
+  Element *element = ((Base *)USER)->first;
+  printf("Usuários:\n");
+  while(element!=NULL){
+    dt = (data *)(element->info);
+    printf("%s\n", dt->username);
+    if(result == NULL){
+      result = malloc(sizeof(char)*(strlen(dt->username) + 2));
+      strcpy(result, dt->username);
+    }else{
+      aux = malloc(sizeof(char)*(strlen(result) + strlen(dt->username) + 2));
+      strcpy(aux, result);
+      strcat(aux, dt->username);
+      result = aux;
+    }
+
+    strcat(result, "\n");
+    element = element->next;
+  }
 
 	return &result;
 }
@@ -390,30 +431,107 @@ int *
 follow_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int  result;
-	
-	/*
-	 * insert server code here
-	 */
 
-	return &result;
+	FOLLOWERS = startList(FOLLOWERS);
+  USER = startList(USER);
+
+  char *username = argp->username;
+  char *otherName = argp->otherName;
+
+
+
+  data *dt;
+  Element *element = ((Base *)USER)->first;
+  while(element!=NULL){
+    dt = (data *)(element->info);
+
+    if(strcmp(dt->otherName, otherName) == 0){
+      element = ((Base *)FOLLOWERS)->first;
+      while(element!=NULL){
+        dt = (data *)(element->info);
+        if(strcmp(username, dt->username)==0 && strcmp(otherName, dt->otherName)){
+          result = 0;
+          return &result;
+        }
+        element = element->next;
+      }
+      dt = malloc(sizeof(data));
+      dt->username = malloc(sizeof(char)*(strlen(username) + 1));
+      dt->otherName = malloc(sizeof(char)*(strlen(otherName) + 1));
+      strcpy(dt->username, username);
+      strcpy(dt->otherName, otherName);
+
+      result = insertEndL(FOLLOWERS, dt);
+      printf("Usuário %s está seguindo %s.\n", dt->username, dt->otherName);
+      return &result;
+    }
+    element = element->next;
+  }
+
+  result = 0;
+  return &result;
+
 }
 
 int *
 post_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int result;
 
-	/*
-	 * insert server code here
-	 */
+  if(TOPIC == NULL){
+    result = 0;
+    return &result;
+  }
 
+  char *user = argp->username;
+  char *topic = argp->topic;
+  char *text = argp->text;
+
+
+
+  data *dt;
+  Element *element = ((Base *)TOPIC)->first;
+  while(element!=NULL){
+    dt = (data *)(element->info);
+    
+ 
+    element = element->next;
+  }
+
+
+
+  
+  /*data *dt;
+  Element **/element = ((Base *)TOPIC)->first;
+  while(element!=NULL){
+    dt = (data *)(element->info);
+    
+    if(strcmp(dt->topic, topic)==0){
+      POST = startList(POST);
+
+      dt = malloc(sizeof(data));
+      dt->username = malloc(sizeof(char)*(strlen(user)+1));
+      dt->topic = malloc(sizeof(char)*(strlen(topic)+1));
+      dt->text = malloc(sizeof(char)*(strlen(text)+1));
+      strcpy(dt->username, user);
+      strcpy(dt->topic, topic);
+      strcpy(dt->text, text);
+      
+      result = insertEndL(POST, dt);
+      printf("Nova postagem em %s : \nUsuário : %s\n%s\n", dt->topic, dt->username, dt->text);
+	    return &result;
+    }
+    element = element->next;
+  }
+
+  result = 0;
 	return &result;
 }
 
 char **
 hashtags_1_svc(void *argp, struct svc_req *rqstp)
 {
-	static char **result = NULL;
+	static char *result = NULL;
   data *p = NULL;
   Posic posic;
   char *string1 = NULL;
@@ -427,12 +545,32 @@ hashtags_1_svc(void *argp, struct svc_req *rqstp)
     do{
       p = (data*) get(TOPIC, posic);
       if(p != NULL){
-        //Lógica para colocar os tópico em uma string
+        if(result == NULL){
+          string1 = NULL;
+          string1 = (char*) malloc(strlen(result) * sizeof(char));
+          if(string1 != NULL){
+            strcpy(string1, result);
+            free(result);
+            result = (char*) malloc((strlen(string1) + strlen(p->topic)) * sizeof(char));
+            if(result != NULL){
+              strcpy(result, string1);
+              strcat(result, p->topic);
+            }
+
+          }
+        }
+        else
+        {
+          result = (char*) malloc(strlen(p->topic) * sizeof(char));
+          if(result != NULL){
+            strcpy(result, strlen(p->topic));
+          }
+        }
       }
       posic = getNext(TOPIC, posic);
     }while(posic != NULL);
 
-		result = 1;
+
 	}
 
  	return &result;
@@ -528,28 +666,48 @@ unfollow_1_svc(data *argp, struct svc_req *rqstp)
 char **
 retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static char **result = NULL;
+	static char *result = NULL;
   data *p = NULL;
   Posic posic;
   char *string1 = NULL;
 
 
-	TOPIC = startList(TOPIC);
+	POST = startList(POST);
 
-	if(!isEmpty(TOPIC)){
+	if(!isEmpty(POST)){
 		
-		posic = getFirst(TOPIC);
+		posic = getFirst(POST);
     do{
-      p = (data*) get(TOPIC, posic);
+      p = (data*) get(POST, posic);
       if(p != NULL){
         if(strcmp(p->topic, argp->topic) == 0){
-          //Lógica para colocar os posts em uma string
+          if(result == NULL){
+            string1 = NULL;
+            string1 = (char*) malloc(strlen(result) * sizeof(char));
+            if(string1 != NULL){
+              strcpy(string1, result);
+              free(result);
+              result = (char*) malloc((strlen(string1) + strlen(p->text)) * sizeof(char));
+              if(result != NULL){
+                strcpy(result, string1);
+                strcat(result, p->text);
+              }
+
+            }
+          }
+          else
+          {
+            result = (char*) malloc(strlen(p->text) * sizeof(char));
+            if(result != NULL){
+              strcpy(result, strlen(p->text));
+            }
+          }
         }
+
       }
-      posic = getNext(TOPIC, posic);
+      posic = getNext(POST, posic);
     }while(posic != NULL);
 
-		result = 1;
 	}
 
  	return &result;
