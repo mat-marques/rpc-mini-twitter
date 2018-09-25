@@ -1,7 +1,7 @@
 A baixo está listados as funções que são permitidas ao usuário
 manipular. A sequência de comandos se elabora na seguinte ordem
 [nome_funcao] [params1,..., paramsn]
-Os parâmetros devem ser desconsiderados
+As chaves devem ser desconsiderados
 
 Lista de funções:
 
@@ -24,5 +24,14 @@ Lista de funções:
 [twitte] [text] [Descrição: Usuário envia um post (Twittar)]
 
 
+Exemplo de chamada inicial do programa:
+./twitter_cliente localhost create_user @username
+
 Exemplo de chamada de procedimento:
-./twitter_cliente localhost create_user @nome
+twitte aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+Exemplo de chamada do Help:
+-h
+
+
+

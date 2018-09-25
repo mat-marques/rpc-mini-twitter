@@ -12,6 +12,8 @@
 
 #define fileHelpName "instructions.txt"
 
+char *userName = NULL;
+
 void 
 create_user_interface(CLIENT *clnt, char *username){
 	int *result;
@@ -221,7 +223,8 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 }
 
 
-void readAllFile(char *fileName){
+void 
+readAllFile(char *fileName){
 	char    *buffer;
 	long    numbytes;
 	FILE *f = NULL;
@@ -250,7 +253,8 @@ void readAllFile(char *fileName){
 }
 
 
-void verifyParams(int argc, char **argv){
+void 
+verifyParams(int argc, char **argv){
 
 	if(strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-help") == 0){
 
@@ -266,9 +270,12 @@ void verifyParams(int argc, char **argv){
 
 }
 
-void menu(int argc, char **argv){
+void 
+menu(int argc, char **argv){
 
 	CLIENT *clnt;
+	char *function = NULL;
+	char *params = NULL;
 
    	clnt = clnt_create (argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
 
@@ -278,37 +285,54 @@ void menu(int argc, char **argv){
 		exit(1);
 	}
 
-	if(strcmp(argv[2],"hashtag") == 0 && argc > 3)
-	{
-		hashtags_interface(clnt);
+	create_user_interface(clnt, argv[3]);
+
+	while(1){
+		
+		//Ler do console
+
+		if(strcmp(function,"exit") == 0)
+		{
+			exit(1);
+		}
+
+		if(strcmp(function,"hashtag") == 0)
+		{
+			hashtags_interface(clnt);
+		}
+		else if(strcmp(function,"new_topic") == 0)
+		{
+			new_topic_interface(clnt, argv[3], argv[4]);
+		}
+		else if(strcmp(function,"unfollow") == 0)
+		{
+			unfollow_interface(clnt, argv[3], argv[4]);
+		}
+		if(strcmp(function,"retrievetopic") == 0){
+			retrievetopic_interface(clnt, argv[3], argv[4], argv[5]);
+		}
+		else if(strcmp(function,"twitte") == 0)
+		{
+			twitte_interface(clnt, argv[3], argv[4]);
+		}
+		else
+		{
+			printf("Função desconhecida ou parâmetros faltando! Digite -h para visualizar as informações permitidas.\n");
+		}
+
 	}
-	else if(strcmp(argv[2],"new_topic") == 0 && argc > 4)
-	{
-		new_topic_interface(clnt, argv[3], argv[4]);
-	}
-	else if(strcmp(argv[2],"unfollow") == 0 && argc > 4)
-	{
-		unfollow_interface(clnt, argv[3], argv[4]);
-	}
-	if(strcmp(argv[2],"retrievetopic") == 0 && argc > 5){
-		retrievetopic_interface(clnt, argv[3], argv[4], argv[5]);
-	}
-	else if(strcmp(argv[2],"twitte") == 0 && argc > 4)
-	{
-		twitte_interface(clnt, argv[3], argv[4]);
-	}
-	else
-	{
-		printf("Função desconhecida ou parâmetros faltando! Digite -h para visualizar as informações permitidas.\n");
-	}
+
 }
 
 int
 main (int argc, char *argv[])
 {
 
-	verifyParams(argc, argv);
-	printf("Passei Aqui\n");
+	if (argc < 4){
+		fprintf (stderr,"Usage: %s hostname create_user @username\n",argv[0]);
+		exit (1);
+	}
+
 	menu(argc, argv);
 
 	return (0);
