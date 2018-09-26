@@ -201,6 +201,7 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	free(r);
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
+		clnt_perror(clnt, "localhost");
 	}
 	else
 	{
