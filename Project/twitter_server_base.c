@@ -405,10 +405,9 @@ list_users_1_svc(void *argp, struct svc_req *rqstp)
   USER = startList(USER);
   data *dt;
   Element *element = ((Base *)USER)->first;
-  printf("Usuários:\n");
+  
   while(element!=NULL){
     dt = (data *)(element->info);
-    printf("%s(%d)", dt->username, lengthL(USER));
     if(result == NULL){
       result = malloc(sizeof(char)*(strlen(dt->username) + 2));
       strcpy(result, dt->username);
@@ -423,14 +422,16 @@ list_users_1_svc(void *argp, struct svc_req *rqstp)
     element = element->next;
   }
 
+  printf("Usuários:\n");
   printf("%s\n", result);
 	return &result;
 }
 
-int *
-follow_1_svc(data *argp, struct svc_req *rqstp)
+int * follow_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int result;
+
+  printf("\n!!1111!!!!!!!!!!!!!!!!!!\n");
 
 	FOLLOWERS = startList(FOLLOWERS);
   USER = startList(USER);
@@ -450,11 +451,13 @@ follow_1_svc(data *argp, struct svc_req *rqstp)
       while(element!=NULL){
         dt = (data *)(element->info);
         if(strcmp(username, dt->username)==0 && strcmp(otherName, dt->otherName)){
+          printf("%s já está seguindo %s\n", username, otherName);
           result = 0;
           return &result;
         }
         element = element->next;
       }
+
       dt = malloc(sizeof(data));
       dt->username = malloc(sizeof(char)*(strlen(username) + 1));
       dt->otherName = malloc(sizeof(char)*(strlen(otherName) + 1));
@@ -463,12 +466,14 @@ follow_1_svc(data *argp, struct svc_req *rqstp)
 
       result = insertEndL(FOLLOWERS, dt);
       printf("Usuário %s está seguindo %s.\n", dt->username, dt->otherName);
+      result = 1;
       return &result;
     }
     element = element->next;
   }
-
+  printf("Usuário %s nao existe\n", otherName);
   result = 0;
+
   return &result;
 
 }
@@ -478,31 +483,18 @@ post_topic_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static int result;
 
-  if(TOPIC == NULL){
-    result = 0;
-    return &result;
-  }
+  POST = startList(POST);
+  TOPIC = startList(TOPIC);
+
+
 
   char *user = argp->username;
   char *topic = argp->topic;
   char *text = argp->text;
 
 
-
   data *dt;
   Element *element = ((Base *)TOPIC)->first;
-  while(element!=NULL){
-    dt = (data *)(element->info);
-    
- 
-    element = element->next;
-  }
-
-
-
-  
-  /*data *dt;
-  Element **/element = ((Base *)TOPIC)->first;
   while(element!=NULL){
     dt = (data *)(element->info);
     
@@ -713,7 +705,11 @@ retrievetopic_1_svc(data *argp, struct svc_req *rqstp)
     }while(posic != NULL);
 
 	}
-
+  else
+  {
+    result = malloc(45 * sizeof(char));
+    strcpy(result, "Nenhum tópico cadastrado na base de dados.");
+  }
  	return &result;
 }
 

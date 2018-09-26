@@ -14,12 +14,12 @@
 
 char *userName = NULL;
 
+
 int * 
 create_user_interface(CLIENT *clnt, char *username){
 	int *result;
 
 	result = create_user_1(&username, clnt);
-
 	if(*result == 1){
 		*result = 1;
 	}else{
@@ -46,28 +46,32 @@ list_users_interface(CLIENT *clnt){
 	free(*users);
 }
 
-void
+int * 
 follow_interface(CLIENT *clnt, char *username, char *otherName)
 {
 	int *result;
 	data *dt = malloc(sizeof(data));
 	dt->username = malloc(sizeof(char)*(strlen(username)+1));
 	dt->otherName = mem_alloc(sizeof(char)*(strlen(otherName)+1));
+	dt->text = NULL;
+	dt->topic = NULL;
+	dt->timestamp = NULL;
 	strcpy(dt->username, username);
 	strcpy(dt->otherName, otherName);
 
+	printf("[%s]\n[%s]\n", dt->username, dt->otherName);
+
 	result = follow_1(dt, clnt);
 
-	if(*result == 1){
-		printf("Seguindo %s", otherName);
-	}else{
-		printf("Erro ao seguir %s", otherName);
-	}
+	//printf("{%d}\n", *result);
+	return result;
 
 }
 
-void post_topic_interface(CLIENT *clnt, char *username, char *topic, char *text){
+int *
+post_topic_interface(CLIENT *clnt, char *username, char *topic, char *text){
 	int *result;
+
 	data *d = malloc(sizeof(data));
 	d->username = malloc(sizeof(char)*(strlen(username) + 1));
 	d->topic = malloc(sizeof(char)*(strlen(topic) + 1));
@@ -78,12 +82,10 @@ void post_topic_interface(CLIENT *clnt, char *username, char *topic, char *text)
 
 	result = post_topic_1(d, clnt);
 
-	if(*result == 1){
-		printf("Post criado com sucesso,\n");
-	}else{
-		printf("Erro ao criar topico.\n");
-	}
+
+	return result;
 }
+
 
 void
 hashtags_interface(CLIENT *clnt)
