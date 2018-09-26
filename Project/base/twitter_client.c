@@ -98,7 +98,7 @@ hashtags_interface(CLIENT *clnt)
 	}
 	else 
 	{
-		printf("Listagem de Tópicos:%s\n", *result);
+		printf("Listagem de Tópicos:\n%s\n", *result);
 	}
 }
 
@@ -107,19 +107,27 @@ new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 {
 	int *result;
 	data *t = malloc(sizeof(data));
+	t->username  = NULL;
+	t->otherName = NULL;
+	t->topic = NULL;
+	t->text = NULL;
+	t->timestamp = NULL;
 
 	t->username = malloc((strlen(username) + 1) * sizeof(char));
 	t->topic = malloc((strlen(topicParam) + 1) * sizeof(char));
 
 	strcpy(t->username, username);
 	strcpy(t->topic, topicParam);
+	// printf("%s %s\n", t->username, t->topic);
+
 	result = new_topic_1(t, clnt);
 
 	free(t->username);
 	free(t->topic);
 	free(t);
-	if (result == NULL){
+	if (result == (int *)NULL){
 		printf ("Problemas ao chamar a função remota\n");
+		clnt_perror(clnt, "localhost");
 	}
 	else if(*result == 1){
 		printf ("Tópico criado com sucesso!\n");
@@ -136,6 +144,11 @@ unfollow_interface(CLIENT *clnt, char *username, char *otherName)
 {
 	int *result;
 	data *f = (data*) malloc(sizeof(data));
+	f->username  = NULL;
+	f->otherName = NULL;
+	f->topic = NULL;
+	f->text = NULL;
+	f->timestamp = NULL;
 
 	f->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
 	f->otherName = (char*) malloc((strlen(otherName) + 1) * sizeof(char));
@@ -166,6 +179,11 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	char **result;
 	int i = 0;
 	data *r = (data*) malloc(sizeof(data));
+	r->username  = NULL;
+	r->otherName = NULL;
+	r->topic = NULL;
+	r->text = NULL;
+	r->timestamp = NULL;
 
 	r->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
 	r->topic = (char*) malloc((strlen(topicParam) + 1) * sizeof(char));
@@ -186,7 +204,7 @@ retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *ti
 	}
 	else
 	{
-		printf("Listagem de Postagem:\n%s", *result);
+		printf("Listagem de Postagem:\n%s\n", *result);
 	}
 
 }
@@ -196,6 +214,11 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 {
 	int *result;
 	data *t = (data*) malloc(sizeof(data));
+	t->username  = NULL;
+	t->otherName = NULL;
+	t->topic = NULL;
+	t->text = NULL;
+	t->timestamp = NULL;
 
 	t->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
 	t->text = (char*) malloc((strlen(text) + 1) * sizeof(char));
@@ -325,7 +348,7 @@ menu(int argc, char **argv){
 	userName = malloc(sizeof(char)*256);
 	line = malloc(sizeof(char)*256);
 
-	clnt = clnt_create(argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
+	clnt = clnt_create(argv[1], TWITTER_PROG, TWITTER_VERSION, "tcp");
 	if (clnt == NULL)
 	{
 		clnt_pcreateerror (argv[1]);
@@ -339,6 +362,9 @@ menu(int argc, char **argv){
 		printf("Crie um usuário: ");
 		fgets(userName, 256, stdin);
 		if(userName[0] == '@' && strlen(userName)>1){
+			if(userName[strlen(userName) - 1] == '\n'){
+				userName[strlen(userName)-1] = '\0';
+			}
 			intResponse = create_user_interface(clnt, userName);
 			if(*intResponse == 1){
 				printf("Usuário criado com sucesso.\n");

@@ -23,7 +23,7 @@ struct data {
 };
 typedef struct data data;
 
-#define TWITTER_PROG 12345678
+#define TWITTER_PROG 0x30D0D0DF
 #define TWITTER_VERSION 1
 
 #if defined(__STDC__) || defined(__cplusplus)

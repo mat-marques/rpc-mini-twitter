@@ -1,4 +1,4 @@
-#define PROGRAM_NUMBER 12345678
+#define PROGRAM_NUMBER 0x30D0D0DF
 #define VERSION_NUMBER 1
 
 /* tipo de dado que será passado aos procedimentos remotos */

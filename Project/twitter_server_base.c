@@ -572,7 +572,11 @@ hashtags_1_svc(void *argp, struct svc_req *rqstp)
 
 
 	}
-
+  else 
+  {
+    result = malloc(45 * sizeof(char));
+    strcpy(result, "Nenhum tópico cadastrado na base de dados.");
+  }
  	return &result;
 }
 
