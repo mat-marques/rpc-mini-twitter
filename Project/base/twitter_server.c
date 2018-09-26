@@ -582,35 +582,35 @@ new_topic_1_svc(data *argp, struct svc_req *rqstp)
 	static int  result = 0;
 	data *t = NULL;
 
+  printf("Passei Aqui\n");
 	TOPIC = startList(TOPIC);
+	
+  printf("Passei Aqui\n");
+  t = (data*) malloc(sizeof(data));
 
-	if(!isEmpty(TOPIC)){
-		
-		t = (data*) malloc(sizeof(data));
+  if(t == NULL){
+    return &result;
+  }
 
-		if(t == NULL){
-			return &result;
-		}
+  t->username = (char*) malloc(strlen(argp->username) * sizeof(char));
+  if(t->username == NULL){
+    return &result;
+  }
 
-		t->username = (char*) malloc(strlen(argp->username) * sizeof(char));
-		if(t->username == NULL){
-			return &result;
-		}
+  t->topic = (char*) malloc(strlen(argp->topic) * sizeof(char));
+  if(t->topic == NULL){
+    return &result;
+  }
 
-		t->topic = (char*) malloc(strlen(argp->topic) * sizeof(char));
-		if(t->topic == NULL){
-			return &result;
-		}
+  printf("Passei Aqui\n");
+  strcpy(t->username, argp->username);
+  strcpy(t->topic, argp->topic);
 
-		strcpy(t->username, argp->username);
-		strcpy(t->topic, argp->topic);
+  if(insertEndL(TOPIC, t) != 1){
+    return &result;
+  }
 
-		if(insertEndL(TOPIC, t) != 1){
-			return &result;
-		}
-
-		result = 1;
-	}
+  result = 1;
 
  	return &result;
 }

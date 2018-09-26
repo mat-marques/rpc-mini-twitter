@@ -7,33 +7,118 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
 #include "twitter.h"
 
 #define fileHelpName "instructions.txt"
 
+char *userName = NULL;
+
+int * 
+create_user_interface(CLIENT *clnt, char *username){
+	int *result;
+
+	result = create_user_1(&username, clnt);
+
+	if(*result == 1){
+		*result = 1;
+	}else{
+		*result = 0;
+	}
+
+	return result;
+}
 
 
+void 
+list_users_interface(CLIENT *clnt){
+	int *result;
+	char **users;
+	data *dt;
+	
+	users = list_users_1(dt, clnt);
+
+	if(users == NULL){
+		printf("Nenhum usuário cadastrado.");
+	}else{
+		printf("Usuários:\n%s", *users);
+	}
+	free(*users);
+}
+
+void
+follow_interface(CLIENT *clnt, char *username, char *otherName)
+{
+	int *result;
+	data *dt = malloc(sizeof(data));
+	dt->username = malloc(sizeof(char)*(strlen(username)+1));
+	dt->otherName = mem_alloc(sizeof(char)*(strlen(otherName)+1));
+	strcpy(dt->username, username);
+	strcpy(dt->otherName, otherName);
+
+	result = follow_1(dt, clnt);
+
+	if(*result == 1){
+		printf("Seguindo %s", otherName);
+	}else{
+		printf("Erro ao seguir %s", otherName);
+	}
+
+}
+
+void post_topic_interface(CLIENT *clnt, char *username, char *topic, char *text){
+	int *result;
+	data *d = malloc(sizeof(data));
+	d->username = malloc(sizeof(char)*(strlen(username) + 1));
+	d->topic = malloc(sizeof(char)*(strlen(topic) + 1));
+	d->text = malloc(sizeof(char)*(strlen(text) + 1));
+	strcpy(d->username, username);
+	strcpy(d->topic, topic);
+	strcpy(d->text, text);
+
+	result = post_topic_1(d, clnt);
+
+	if(*result == 1){
+		printf("Post criado com sucesso,\n");
+	}else{
+		printf("Erro ao criar topico.\n");
+	}
+}
+
+void
+hashtags_interface(CLIENT *clnt)
+{
+	char **result;
+	data *h = NULL;
+	int i = 0;
+	result = hashtags_1(h, clnt);
+
+	if (result == NULL){
+		printf ("Problemas ao chamar a função remota\n");
+		exit (1);
+	}
+	else 
+	{
+		printf("Listagem de Tópicos:%s\n", *result);
+	}
+}
 
 void
 new_topic_interface(CLIENT *clnt, char *username, char *topicParam)
 {
 	int *result;
-	topic t;
+	data *t = malloc(sizeof(data));
 
-	t.username = (char*) malloc(strlen(username) * sizeof(char));
-	t.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
+	t->username = malloc((strlen(username) + 1) * sizeof(char));
+	t->topic = malloc((strlen(topicParam) + 1) * sizeof(char));
 
-	strcpy(t.username, username);
-	strcpy(t.topic, topicParam);
-	
-	printf("%s\n", t.username);
-	printf("%s\n", t.topic);
-	
-	result = new_topic_1(&t, clnt);
+	strcpy(t->username, username);
+	strcpy(t->topic, topicParam);
+	result = new_topic_1(t, clnt);
 
-	free(t.username);
-	free(t.topic);
-
+	free(t->username);
+	free(t->topic);
+	free(t);
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
@@ -52,19 +137,19 @@ void
 unfollow_interface(CLIENT *clnt, char *username, char *otherName)
 {
 	int *result;
-	followUser f;
+	data *f = (data*) malloc(sizeof(data));
 
-	f.username = (char*) malloc(strlen(username) * sizeof(char));
-	f.otherName = (char*) malloc(strlen(otherName) * sizeof(char));
+	f->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
+	f->otherName = (char*) malloc((strlen(otherName) + 1) * sizeof(char));
 
-	strcpy(f.username, username);
-	strcpy(f.otherName, otherName);
+	strcpy(f->username, username);
+	strcpy(f->otherName, otherName);
 
-	result = unfollow_1(&f, clnt);
+	result = unfollow_1(f, clnt);
 
-	free(f.username);
-	free(f.otherName);
-
+	free(f->username);
+	free(f->otherName);
+	free(f);
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
@@ -82,25 +167,30 @@ void
 retrievetopic_interface(CLIENT *clnt, char *username, char *topicParam, char *timestamp)
 {
 	char **result;
-	retrieve r;
+	int i = 0;
+	data *r = (data*) malloc(sizeof(data));
 
-	r.username = (char*) malloc(strlen(username) * sizeof(char));
-	r.topic = (char*) malloc(strlen(topicParam) * sizeof(char));
-	r.timestamp = (char*) malloc(strlen(timestamp) * sizeof(char));
+	r->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
+	r->topic = (char*) malloc((strlen(topicParam) + 1) * sizeof(char));
+	r->timestamp = (char*) malloc((strlen(timestamp) + 1) * sizeof(char));
 
-	strcpy(r.username, username);
-	strcpy(r.topic, topicParam);
-	strcpy(r.timestamp, timestamp);
+	strcpy(r->username, username);
+	strcpy(r->topic, topicParam);
+	strcpy(r->timestamp, timestamp);
 
-	result = retrievetopic_1(&r, clnt);
+	result = retrievetopic_1(r, clnt);
 
-	free(r.username);
-	free(r.topic);
-	free(r.timestamp);
-
+	free(r->username);
+	free(r->topic);
+	free(r->timestamp);
+	free(r);
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
+	}
+	else
+	{
+		printf("Listagem de Postagem:\n%s", *result);
 	}
 
 }
@@ -109,19 +199,19 @@ void
 twitte_interface(CLIENT *clnt, char *username, char *text)
 {
 	int *result;
-	twitteMessage t;
+	data *t = (data*) malloc(sizeof(data));
 
-	t.username = (char*) malloc(strlen(username) * sizeof(char));
-	t.text = (char*) malloc(strlen(text) * sizeof(char));
+	t->username = (char*) malloc((strlen(username) + 1) * sizeof(char));
+	t->text = (char*) malloc((strlen(text) + 1) * sizeof(char));
 
-	strcpy(t.username, username);
-	strcpy(t.text, text);
+	strcpy(t->username, username);
+	strcpy(t->text, text);
 
-	result = twitte_1(&t, clnt);
+	result = twitte_1(t, clnt);
 
-	free(t.username);
-	free(t.text);
-
+	free(t->username);
+	free(t->text);
+	free(t);
 	if (result == NULL){
 		printf ("Problemas ao chamar a função remota\n");
 		exit (1);
@@ -136,7 +226,54 @@ twitte_interface(CLIENT *clnt, char *username, char *text)
 }
 
 
-void readAllFile(char *fileName){
+/*
+  Funcao que retorna uma token especifica da string passada
+  a funcao percorre a string procurando por espacos ou fim da string, salvando o que e liso no processo
+  a funcao faz isso um numero n de vezes, retornando a ultima token encontrada
+*/
+char *returnToken(char *s, int n)
+{
+	int i = 0, j, k;
+	char *aux = NULL;
+
+	for(k=0; k<n && i < strlen(s); k++){
+
+		if(aux != NULL){
+			free(aux);
+			aux = NULL;
+		}
+		for(j = 0; s[i]!=' ' && s[i]!='\0'; j++){
+			aux = (char *)realloc(aux, sizeof(char)*(j+2));
+			aux[j] = s[i];
+			aux[j+1] = '\0';
+			i++;
+		}
+    if(s[i] == '\0' && k<n-1){return NULL;}
+		i++;
+	}
+	return aux;
+}
+
+
+void
+printErr(int i){
+	switch(i){
+
+		case 2:
+			printf("Parametros faltando.");
+			break;
+		case 3:
+			printf("Formato suportado: \"@username\"");
+			break;
+		default:
+			printf("Erro desconhecido.\n");
+			break;
+	};
+}
+
+
+void 
+readAllFile(char *fileName){
 	char    *buffer;
 	long    numbytes;
 	FILE *f = NULL;
@@ -165,7 +302,8 @@ void readAllFile(char *fileName){
 }
 
 
-void verifyParams(int argc, char **argv){
+void 
+verifyParams(int argc, char **argv){
 
 	if(strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-help") == 0){
 
@@ -181,46 +319,142 @@ void verifyParams(int argc, char **argv){
 
 }
 
-void menu(int argc, char **argv){
+void 
+menu(int argc, char **argv){
 
 	CLIENT *clnt;
+	int *intResponse;
+	char *function = NULL;
+	char *params = NULL;
+	char *line = NULL;
+	userName = malloc(sizeof(char)*256);
+	line = malloc(sizeof(char)*256);
 
-   	clnt = clnt_create (argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
-
-	if (clnt == (CLIENT *) NULL)
+	clnt = clnt_create(argv[1], TWITTER_PROG, TWITTER_VERSION, "udp");
+	if (clnt == NULL)
 	{
 		clnt_pcreateerror (argv[1]);
+		printf("Erro de conexão.\nTente novamente mais tarde.\n");
 		exit(1);
 	}
 
-	printf("%s\n", argv[2]);
-	if(strcmp(argv[2],"new_topic") == 0 && argc > 4)
-	{
-		new_topic_interface(clnt, argv[3], argv[4]);
+
+
+	while(1){
+		printf("Crie um usuário: ");
+		fgets(userName, 256, stdin);
+		if(userName[0] == '@' && strlen(userName)>1){
+			intResponse = create_user_interface(clnt, userName);
+			if(*intResponse == 1){
+				printf("Usuário criado com sucesso.\n");
+				break;
+			}else{
+				printf("Erro ao criar usuário\n");
+			}
+			
+		}
+	}	
+	
+
+	
+
+	
+
+	while(1){
+		printf("\n\n-----------------------\n\n");
+		printf("\"help\" : ajuda/comandos\n\"exit\" : sair\n\n");
+		fgets(line, 256, stdin);
+		line[strlen(line)-1] = '\0';
+		function = returnToken(line, 1);
+		
+		
+
+		if(function == NULL){
+			printf("Função desconhecida! Digite help para visualizar as informações permitidas.\n");
+		}
+		else if(strcmp(function, "help") == 0)
+		{
+			readAllFile(fileHelpName);
+		}
+		else if(strcmp(function,"exit") == 0)
+		{
+			exit(1);
+		}
+		else if(strcmp(function,"hashtag") == 0)
+		{
+			hashtags_interface(clnt);
+		}
+		else if(strcmp(function,"new_topic") == 0)
+		{
+			char *aux1 = returnToken(line, 2);
+			if(aux1 == NULL){printErr(2); continue;}
+			printf("%s %s\n", userName, aux1);
+			new_topic_interface(clnt, userName, aux1);
+			free(aux1);
+		}
+		else if(strcmp(function,"unfollow") == 0)
+		{
+			char *aux1 = returnToken(line, 2);
+			if(aux1 == NULL){printErr(2); continue;}
+
+			unfollow_interface(clnt, userName, aux1);
+			free(aux1);
+		}
+		if(strcmp(function,"retrievetopic") == 0){
+			char *aux1 = returnToken(line, 2);
+			char *aux2 = returnToken(line, 3);
+
+			if(aux1 == NULL){printErr(2); continue;}
+			if(aux2 == NULL){printErr(2); continue;}
+			retrievetopic_interface(clnt, userName, aux1, aux2);
+
+			free(aux1);
+			free(aux2);
+		}
+		else if(strcmp(function,"twitte") == 0)
+		{
+			char *aux1 = returnToken(line, 2);
+			if(aux1 == NULL){printErr(2); continue;}
+
+			twitte_interface(clnt, userName, aux1);
+			free(aux1);
+		}
+		else if(strcmp(function, "create_user") == 0){
+			char *aux1 = returnToken(line, 2);
+			if(aux1 == NULL){printErr(2); continue;}
+			if(aux1[0] != '@'){printErr(3); continue;}
+
+			intResponse = create_user_interface(clnt, aux1);
+			system("clear");
+
+			if(*intResponse == 1){
+				printf("Usuário criado com sucesso.\n");
+			}else{
+				printf("Erro ao criar usuário.\n");
+			}
+		}
+		else if(strcmp(function, "list_users") == 0)
+		{
+			list_users_interface(clnt);
+		}
+		else
+		{
+			printf("Função desconhecida ou parâmetros faltando! Digite help para visualizar as informações permitidas.\n");
+		}
+
 	}
-	else if(strcmp(argv[2],"unfollow") == 0 && argc > 4)
-	{
-		unfollow_interface(clnt, argv[3], argv[4]);
-	}
-	if(strcmp(argv[2],"retrievetopic") == 0 && argc > 5){
-		retrievetopic_interface(clnt, argv[3], argv[4], argv[5]);
-	}
-	else if(strcmp(argv[2],"twitte") == 0 && argc > 4)
-	{
-		twitte_interface(clnt, argv[3], argv[4]);
-	}
-	else
-	{
-		printf("Função desconhecida ou parâmetros faltando! Digite -h para visualizar as informações permitidas.\n");
-	}
+
 }
 
 int
 main (int argc, char *argv[])
 {
 
-	verifyParams(argc, argv);
-	printf("Passei Aqui\n");
+	if (argc < 2){
+		fprintf (stderr,"Usage: %s hostname create_user @username\n",argv[0]);
+		exit (1);
+	}
+
 	menu(argc, argv);
 
 	return (0);
